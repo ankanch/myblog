@@ -1,0 +1,12 @@
+# DATABASE
+# PATHS
+
+# DATABASE
+VAR_DB_HOST = ""
+VAR_DB_NAME = ""
+VAR_DB_USER = ""
+VAR_DB_PASSWORD = ""
+
+# PATHS
+VAR_IMAGE_UPLOAD = ""
+VAR_CONFIG_FILE = "./config/site.cfg"

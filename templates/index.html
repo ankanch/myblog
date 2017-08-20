@@ -1,0 +1,52 @@
+{% extends "template.html" %} {% block title %}akakanch{% endblock %} {% block content %}
+<div class="row margin-lr-0" id="index_block">
+    <div class="row" style="display:none">
+        {% import 'macros_build_index.html' as index %}
+    </div>
+    <div class="col-md-8">
+        <!--article list-->
+        {{index.buildArticleCard('title', 'brief', 'date','url')}}
+    </div>
+    <div class="col-md-4">
+        <!--right lane-->
+        <div class="row margin-lr-0 right-panel">
+            <div class="card border-success" style="width: 100%;">
+                <div class="card-header">
+                    最近文章
+                </div>
+                <div class="card-body">
+                    <ul class="right-list">
+                        <li><a href="#"> 最近文章测试测试测试测试测试测试</a></li>
+                        <li><a href="#"> 最近文章</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row margin-lr-0 right-panel">
+            <div class="card border-primary" style="width: 100%;">
+                <div class="card-header">
+                    分类目录
+                </div>
+                <div class="card-body">
+                    <ul class="right-list">
+                        <li><a href="#"> 分类目录</a></li>
+                        <li><a href="#"> 分类目录</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row margin-lr-0 right-panel">
+            <div class="card border-warning" style="width: 100%;">
+                <div class="card-body">
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "template.html" %} {% block title %}Result{% endblock %} {% block content %}
+<div class="row">
+    ..
+</div>
+<script>
+    // when document ready , function below will be executed
+    $(document).ready(function() {
+        window.location = "{{TARGET}}"
+    });
+</script>
+{% endblock %}
