@@ -1,0 +1,212 @@
+{% extends "admin_template.html" %} {% block title %}myblog 管理中心{% endblock %} {% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" style="background:white;">
+            <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#cat_homt" role="tab" aria-controls="v-pills-home"
+                aria-expanded="true">主面板</a>
+            <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#cat_articles" role="tab" aria-controls="v-pills-profile"
+                aria-expanded="true">文章管理</a>
+            <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#cat_category" role="tab" aria-controls="v-pills-messages"
+                aria-expanded="true">分类管理</a>
+            <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#cat_site" role="tab" aria-controls="v-pills-settings"
+                aria-expanded="true">站点管理</a>
+            <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#cat_admin" role="tab" aria-controls="v-pills-settings"
+                aria-expanded="true">用户管理</a>
+            <a class="nav-link disabled">myblog v0.1</a>
+        </div>
+        <div class="row" style="display:none">
+            {% import 'macros_build_index.html' as index %}
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-pane fade show active" id="cat_homt" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                <div class="container">
+                    <div class="card bg-light mb-3" style="max-width: 100%;">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3>站点汇总：</h3>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">文章数：</li>
+                                        <li class="list-group-item">分类数：</li>
+                                        <li class="list-group-item">评论数：</li>
+                                        <li class="list-group-item">浏览量</li>
+                                        <li class="list-group-item">上次登录：</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                </script>
+            </div>
+            <div class="tab-pane fade" id="cat_articles" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                <div class="container">
+                    <div class="card bg-light mb-3" style="max-width: 100%;">
+                        <div class="card-header">文章管理</div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <button type="button" class="btn btn-outline-primary col-sm-2">撰写新文章</button>
+                                <label for="inputPassword" class="col-sm-2 col-form-label">搜索文章：</label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="new_catename" placeholder="文章关键字">
+                                </div>
+                                <button type="button" class="btn btn-outline-primary col-sm-2" onclick="addCate()">搜索</button>
+                            </div>
+                            <div class="row">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>文章名</th>
+                                            <th>文章分类</th>
+                                            <th>链接</th>
+                                            <th>阅读量</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{index.buildArticleList('id','name','article_count','url','0')}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    function modifyArticle(id) {}
+
+                    function editArticle(id) {}
+
+                    function deleteArticle(id) {
+
+                    }
+
+                    function searchArticle() {
+
+                    }
+                </script>
+            </div>
+            <div class="tab-pane fade" id="cat_category" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                <div class="container">
+                    <div class="card bg-light mb-3" style="max-width: 100%;">
+                        <div class="card-header">分类管理</div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">新分类：</label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="new_catename" placeholder="分类名">
+                                </div>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" id="new_cateurl" placeholder="分类URL">
+                                </div>
+                                <button type="button" class="btn btn-outline-primary col-sm-2" onclick="addCate()">添加</button>
+                            </div>
+                            <div class="row">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>分类名</th>
+                                            <th>文章数量</th>
+                                            <th>分类URL</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{index.buildCategory('id','name','article_count','url')}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    function changeCate(id) {
+
+                    }
+
+                    function deleteCate(id) {
+
+                    }
+
+                    function addCate() {
+
+                    }
+                </script>
+            </div>
+            <div class="tab-pane fade" id="cat_site" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                <div class="container">
+                    <div class="card bg-light mb-3" style="max-width: 100%;">
+                        <div class="card-header">站点管理</div>
+                        <div class="card-body">
+                            <form action="/changesiteinfo" method="post" style="max-width:100%;margin:0 auto;">
+                                <div class="row">
+                                    <label for="site_name" class="col-sm-2 col-form-label">站点名：</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="site_name" value="akakanch" placeholder="站点名">
+                                    </div>
+                                </div>
+                                <div style="text-align:center;">
+                                    <button type="submit" class="btn btn-outline-primary">储存</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                </script>
+            </div>
+            <div class="tab-pane fade" id="cat_admin" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                <div class="container">
+                    <div class="card text-white bg-danger mb-3" style="max-width: 100%;">
+                        <div class="card-header">用户管理</div>
+                        <div class="card-body">
+                            <form action="/changeadmininfo" method="post" style="max-width:100%;margin:0 auto;">
+                                <div class="row">
+                                    <label for="username" class="col-sm-2 col-form-label">用户名：</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="username" value="kanch96" placeholder="用户名">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="old_pwd" class="col-sm-2 col-form-label">旧密码：</label>
+                                    <div class="col-sm-3">
+                                        <input type="password" class="form-control" id="old_pwd" placeholder="旧密码">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="new_pwm" class="col-sm-2 col-form-label">新密码：</label>
+                                    <div class="col-sm-3">
+                                        <input type="password" class="form-control" id="new_pwm" placeholder="新密码">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="confirm_new_pwm" class="col-sm-2 col-form-label">确认密码：</label>
+                                    <div class="col-sm-3">
+                                        <input type="password" class="form-control" id="confirm_new_pwm" placeholder="确认新密码">
+                                    </div>
+                                </div>
+                                <div style="text-align:center;">
+                                    <button type="submit" class="btn btn-outline-primary">储存</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        document.body.style.backgroundColor = "#eceff1";
+        document.getElementById("superdiv").style.marginLeft = "0px";
+        document.getElementById("superdiv").style.paddingLeft = "0px";
+    });
+</script>
+{% endblock %}

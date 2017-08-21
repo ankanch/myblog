@@ -3,7 +3,7 @@ import flask
 import os
 from config import config as CFG
 from config import urlmap
-from Utilities import globeVar
+from Utilities import globeVar,sessionManager
 from Utilities import message as Message
 from flask import Flask, jsonify, redirect, render_template, request,make_response,send_file,Response
 
@@ -24,6 +24,29 @@ def xRoute(url):
         return render_template(urlmap.URLMAP_NAVIGATION[url][1])
     else:
         pass
+
+@app.route('/myblog/admin')
+def admin():
+    session = request.cookies.get("session")
+    if session in globeVar.VARS["SESSIONS"]:
+        return render_template("admin_center.html")
+    else:
+        return render_template("admin_login.html",ERROR=True)
+
+@app.route('/adminlogin',methods=['POST'])
+def adminlogin():
+    uname = request.form['username']
+    upwd = request.form['password']
+    if uname == globeVar.VARS["username"] and upwd == globeVar.VARS["password"]:
+        session = sessionManager.generateSessionID()
+        globeVar.VARS["SESSIONS"].append(session)
+        redirect_to_admin = redirect("/myblog/admin")
+        response = app.make_response(redirect_to_admin )  
+        response.set_cookie('session',value=session)
+        return response
+    else:
+        return redirect("/myblog/admin")
+
 
 
 if __name__ == '__main__':

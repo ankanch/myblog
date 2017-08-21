@@ -10,7 +10,10 @@ def loadConfig():
     """
     with open(CFG.VAR_CONFIG_FILE) as ff:
         for line in ff:
-            if line[0] != "#":
+            if line[0] != "#" and len(line)>3:
                 line = line.replace("\n","").replace("\r","").split("=")
-                VARS[line[0]] = line[1]
+                if line[0] != "SESSIONS":
+                    VARS[line[0]] = line[1]
+                else:
+                    VARS[line[0]] = line[1].split(",")
     return VARS

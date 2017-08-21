@@ -10,3 +10,28 @@
 </div>
 </div>
 {%- endmacro %}
+
+{% macro buildCategory(id,name,article_count,url) -%}
+<tr>
+    <th scope="row">{{id}}</th>
+    <td>{{name}}</td>
+    <td>{{article_count}}</td>
+    <td>{{url}}</td>
+    <td><button type="button" class="btn btn-primary btn-sm" onclick="changeCate('{{id}}')">修改</button>
+        <button type="button" class="btn btn-danger btn-sm" onclick="deleteCate('{{id}}')">删除</button></td>
+</tr>
+{%- endmacro %}
+
+{% macro buildArticleList(id,title,cate,url,readings) -%}
+<tr>
+    <th scope="row">{{id}}</th>
+    <td>{{title}}</td>
+    <td>{{cate}}</td>
+    <td>{{url}}</td>
+    <td>{{readings}}</td>
+    <td>
+        <button type="button" class="btn btn-info btn-sm" onclick="modifyArticle('{{id}}')">快速编辑</button>
+      <button type="button" class="btn btn-primary btn-sm" onclick="editArticle('{{id}}')">修改</button>
+        <button type="button" class="btn btn-danger btn-sm" onclick="deleteArticle('{{id}}')">删除</button></td>
+</tr>
+{%- endmacro %}
