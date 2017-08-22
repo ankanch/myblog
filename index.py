@@ -6,6 +6,7 @@ from config import urlmap
 from Utilities import globeVar
 from Utilities import sessionManager,categoryManager,adminManager,othersManager
 from Utilities import message as Message
+from functools import wraps
 from flask import Flask, jsonify, redirect, render_template, request,make_response,send_file,Response
 
 
@@ -26,6 +27,18 @@ def xRoute(url):
     else:
         pass
 
+# >>WRAPS of FLASK
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        session = request.cookies.get("session")
+        if adminManager.checkSession(session) == False:
+            return render_template("admin_login.html",ERROR=True)
+        return f(*args, **kwargs)
+    return decorated
+
+# >>ADMIN RELATED
+
 @app.route('/myblog/admin')
 def admin():
     session = request.cookies.get("session")
@@ -33,6 +46,11 @@ def admin():
         return render_template("admin_center.html",BASIC_INFO=othersManager.getBasicInfo())
     else:
         return render_template("admin_login.html",ERROR=True)
+
+@app.route('/admin/newpost')
+@requires_auth
+def newpost():
+    return render_template("admin_new_article.html")
 
 # >>GET INTERFACE
 @app.route('/get/allcates')
@@ -58,6 +76,9 @@ def adminlogin():
         else:
             return render_template("admin_login.html",ERROR=True,MSG=data)
     else:
+        session = request.cookies.get("session")
+        if adminManager.checkSession(session):
+            return redirect("/myblog/admin")
         return render_template("admin_login.html")
 
 @app.route('/addCate',methods=['POST'])
