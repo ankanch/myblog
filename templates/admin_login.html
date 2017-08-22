@@ -39,8 +39,12 @@
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
+                    {% if MSG %}
+                    {{MSG|safe}}
+                    {% else %}
                     <strong>错误！</strong>你需要以管理员身份登陆才可以进行该操作。<br>
                     <small>myblog auth error</small>
+                    {% endif%}
                 </div>
                 {% endif %}
             </div>

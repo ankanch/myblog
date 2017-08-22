@@ -14,8 +14,7 @@ def loadConfig():
         for line in ff:
             if line[0] != "#" and len(line)>3:
                 line = line.replace("\n","").replace("\r","").split("=")
-                if line[0] != "SESSIONS":
-                    VARS[line[0]] = line[1]
-                else:
-                    VARS[line[0]] = line[1].split(",")
+                VARS[line[0]] = line[1]
     return VARS
+
+loadConfig()

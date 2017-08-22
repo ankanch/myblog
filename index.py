@@ -3,7 +3,8 @@ import flask
 import os
 from config import config as CFG
 from config import urlmap
-from Utilities import globeVar,sessionManager,categoryManager
+from Utilities import globeVar
+from Utilities import sessionManager,categoryManager,adminManager,othersManager
 from Utilities import message as Message
 from flask import Flask, jsonify, redirect, render_template, request,make_response,send_file,Response
 
@@ -11,7 +12,7 @@ from flask import Flask, jsonify, redirect, render_template, request,make_respon
 app = Flask(__name__)
 
 # init 
-ConfigDict =  globeVar.loadConfig()
+ConfigDict =  globeVar.VARS
 print(ConfigDict)
 
 @app.route('/')
@@ -28,8 +29,8 @@ def xRoute(url):
 @app.route('/myblog/admin')
 def admin():
     session = request.cookies.get("session")
-    if session in globeVar.VARS["SESSIONS"]:
-        return render_template("admin_center.html")
+    if adminManager.checkSession(session):
+        return render_template("admin_center.html",BASIC_INFO=othersManager.getBasicInfo())
     else:
         return render_template("admin_login.html",ERROR=True)
 
@@ -41,19 +42,23 @@ def getallcates():
 
 # >>POST INTERFACE
 
-@app.route('/adminlogin',methods=['POST'])
+@app.route('/adminlogin',methods=['POST','GET'])
 def adminlogin():
-    uname = request.form['username']
-    upwd = request.form['password']
-    if uname == globeVar.VARS["username"] and upwd == globeVar.VARS["password"]:
-        session = sessionManager.generateSessionID()
-        globeVar.VARS["SESSIONS"].append(session)
-        redirect_to_admin = redirect("/myblog/admin")
-        response = app.make_response(redirect_to_admin )  
-        response.set_cookie('session',value=session)
-        return response
+    if request.method == 'POST':
+        uname = request.form['username']
+        upwd = request.form['password']
+        code,data = adminManager.loginAdmin(uname,upwd)
+        if code == 0:
+            session = sessionManager.generateSessionID()
+            adminManager.addSession(session)
+            redirect_to_admin = redirect("/myblog/admin")
+            response = app.make_response(redirect_to_admin )  
+            response.set_cookie('session',value=session)
+            return response
+        else:
+            return render_template("admin_login.html",ERROR=True,MSG=data)
     else:
-        return redirect("/myblog/admin")
+        return render_template("admin_login.html")
 
 @app.route('/addCate',methods=['POST'])
 def addCate():
@@ -81,6 +86,10 @@ def updateCate():
     if categoryManager.changeCate(cate_id,cate_name,cate_url):
         return globeVar.SUCCESS
     return globeVar.UNSUCCESS
+
+@app.route('/test')
+def test_anything():
+    return str(adminManager.deleteOutofDateSessions())
 
 if __name__ == '__main__':
     if "mode.server" in os.listdir("./"):
