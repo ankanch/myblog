@@ -2,6 +2,8 @@ import sys
 sys.path.append("./config")
 from config import config as CFG
 
+SUCCESS = "OK"
+UNSUCCESS = "U"
 VARS = {}
 
 def loadConfig():

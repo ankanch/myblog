@@ -3,7 +3,7 @@ import flask
 import os
 from config import config as CFG
 from config import urlmap
-from Utilities import globeVar,sessionManager
+from Utilities import globeVar,sessionManager,categoryManager
 from Utilities import message as Message
 from flask import Flask, jsonify, redirect, render_template, request,make_response,send_file,Response
 
@@ -33,6 +33,14 @@ def admin():
     else:
         return render_template("admin_login.html",ERROR=True)
 
+# >>GET INTERFACE
+@app.route('/get/allcates')
+def getallcates():
+    data = categoryManager.getAllCates()
+    return str(data)
+
+# >>POST INTERFACE
+
 @app.route('/adminlogin',methods=['POST'])
 def adminlogin():
     uname = request.form['username']
@@ -47,7 +55,32 @@ def adminlogin():
     else:
         return redirect("/myblog/admin")
 
+@app.route('/addCate',methods=['POST'])
+def addCate():
+    cate_name = request.form['catename']
+    cate_url = request.form['cateurl']
+    if categoryManager.checkExistence(cate_name,cate_url):
+        if categoryManager.addNewCate(cate_name,cate_url):
+            return globeVar.SUCCESS
+        return globeVar.UNSUCCESS
+    else:
+        return globeVar.UNSUCCESS
 
+@app.route('/deleteCate',methods=['POST'])
+def deleteCate():
+    cate_id = request.form['id']
+    if categoryManager.deleteCate(cate_id):
+        return globeVar.SUCCESS
+    return globeVar.UNSUCCESS
+
+@app.route('/updateCate',methods=['POST'])
+def updateCate():
+    cate_id = request.form['id']
+    cate_name = request.form['new_cate_name']
+    cate_url = request.form['new_cate_url']
+    if categoryManager.changeCate(cate_id,cate_name,cate_url):
+        return globeVar.SUCCESS
+    return globeVar.UNSUCCESS
 
 if __name__ == '__main__':
     if "mode.server" in os.listdir("./"):
