@@ -5,7 +5,9 @@
     </div>
     <div class="col-md-8">
         <!--article list-->
-        {{index.buildArticleCard('title', 'brief', 'date','url')}}
+        {% for article in AC%}
+        {{index.buildArticleCard(article[1],article[2], article[7],article[5])}}
+        {% endfor %}
     </div>
     <div class="col-md-4">
         <!--right lane-->

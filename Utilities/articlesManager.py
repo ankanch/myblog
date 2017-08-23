@@ -46,3 +46,14 @@ def getArticleByURL(url):
     if result[0][8] == 1 or result[0][9] == 1:
         return False,"文章不可用！"
     return True,result[0],result[0][2]#base64.decodestring(result[0][2])
+
+def getBrief(raw_article):
+    raw_article[2] = raw_article[2][:200]
+    return raw_article
+
+def getArticlesList(num):
+    sql = "SELECT * FROM `articles` ORDER BY `DATE` DESC LIMIT %s"%num
+    result = [list(article) for article in  runSQL.runSelect(sql)]
+    if len(result) > 0:
+        return list(map(getBrief,result))
+    return result

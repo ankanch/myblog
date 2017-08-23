@@ -1,11 +1,11 @@
 {% macro buildArticleCard(title, brief, date,url) -%}
-<div class="row margin-lr-0">
+<div class="row margin-lr-0" style="margin-bottom:30px;">
 <div class="card " style="width: 100%;">
   <div class="card-body">
     <h4 class="card-title">{{title}}</h4>
     <h6 class="card-subtitle mb-2 text-muted">{{date}}</h6>
     <p class="card-text">{{brief}}</p>
-    <a href="{{url}}" class="card-link">阅读更多</a>
+    <a href="/article/{{url}}" class="card-link">阅读更多</a>
   </div>
 </div>
 </div>

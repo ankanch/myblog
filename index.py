@@ -18,7 +18,8 @@ print(ConfigDict)
 
 @app.route('/')
 def index():
-    return render_template("index.html",TITLE=ConfigDict["SITE_TITLE"],NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION)
+    al = articlesManager.getArticlesList(5)
+    return render_template("index.html",TITLE=ConfigDict["SITE_TITLE"],NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,AC=al)
 
 @app.route('/<url>')
 def xRoute(url):
