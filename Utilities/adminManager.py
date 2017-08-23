@@ -46,7 +46,7 @@ def addSession(new_session):
     """t
     """
     parsed,raw = getAdminSessions()
-    new_session_raw_string = raw[0][0] + new_session + "@" + str(time())
+    new_session_raw_string = raw[0][0] + "," + new_session + "@" + str(time())
     sql = "UPDATE `admin` SET `SESSIONS`='%s' WHERE 1"%new_session_raw_string
     if runSQL.runUpdate(sql):
         return True
