@@ -36,7 +36,7 @@ def checkSession(session):
     """
     session_list,raw = getAdminSessions()
     for saved in session_list:
-        print(saved,session)
+        #print(saved,session)
         if len(saved)==2 and saved[0] == session:
             if (time() - float(saved[1])) < SESSION_EXPIRES:
                 return True

@@ -1,11 +1,61 @@
-{% extends "template.html" %} {% block title %}Result{% endblock %} {% block content %}
-<div class="row">
-    ..
+{% extends "template.html" %} {% block title %}{{TITLE}}{% endblock %} {% block content %}
+<div class="row margin-lr-0" style="margin-top:80px;"></div>
+<div class="row margin-lr-0">
+<h1>{{ATITLE}}</h1>
 </div>
+<div class="row margin-lr-0">
+        <h6 style="color:grey;font-style:italic;">{{DATE}}</h6>
+        <h6 style="color:grey;">{{CATES}}</h6>
+        <h6 style="color:grey;">浏览量：{{READINGS}}</h6>
+</div>
+<div class="row margin-lr-0">
+    <div class="col-md-8" style="margin-top:10px;" id="article_content">
+        {{CONTENT}}
+    </div>
+    <div class="col-md-4">
+        <!--right lane-->
+        <div class="row margin-lr-0 right-panel">
+            <div class="card border-success" style="width: 100%;">
+                <div class="card-header">
+                    最近文章
+                </div>
+                <div class="card-body">
+                    <ul class="right-list">
+                        <li><a href="#"> 最近文章测试测试测试测试测试测试</a></li>
+                        <li><a href="#"> 最近文章</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row margin-lr-0 right-panel">
+            <div class="card border-primary" style="width: 100%;">
+                <div class="card-header">
+                    分类目录
+                </div>
+                <div class="card-body">
+                    <ul class="right-list">
+                        <li><a href="#"> 分类目录</a></li>
+                        <li><a href="#"> 分类目录</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row margin-lr-0 right-panel">
+            <div class="card border-warning" style="width: 100%;">
+                <div class="card-body">
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../static/showdown-1.7.2/showdown.min.js"></script>
 <script>
     // when document ready , function below will be executed
-    $(document).ready(function() {
-        window.location = "{{TARGET}}"
+    $(document).ready(function () {
+        var article_content = document.getElementById("article_content");
+        var converter = new showdown.Converter();
+        article_content.innerHTML = converter.makeHtml(article_content.innerHTML);
     });
 </script>
 {% endblock %}
