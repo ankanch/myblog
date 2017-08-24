@@ -10,4 +10,3 @@ VAR_DB_PASSWORD = "Ln525SuTr7reDYuP"
 # PATHS
 VAR_IMAGE_UPLOAD = ""
 VAR_CONFIG_FILE = "./config/site.cfg"
-

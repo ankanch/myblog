@@ -16,6 +16,11 @@
     margin-top: 5px;
 }
 
+.padding-lr-0{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
 #index_block{
     padding-top: 22px;
 }

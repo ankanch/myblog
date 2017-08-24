@@ -1,6 +1,7 @@
 import time
 import flask
 import os
+import json
 from config import config as CFG
 from config import urlmap
 from Utilities import globeVar
@@ -73,6 +74,18 @@ def getallcates():
     data = categoryManager.getAllCates()
     return str(data)
 
+@app.route('/get/articles/<where>/<page_start>')
+def getArticles(where,page_start):
+    """
+    This function wil get one page of articles at one time.
+    the parameter `where` specified the display page of articles, index page or admin center
+    """
+    if where == "index":
+        pass
+    elif where == "admin":
+        data = articlesManager.getArticlesListD(page_start*15,15)
+        return json.dumps(data)
+
 # >>POST INTERFACE
 
 @app.route('/adminlogin',methods=['POST','GET'])
@@ -139,6 +152,20 @@ def publishArticle():
         return globeVar.SUCCESS
     return globeVar.UNSUCCESS
 
+@app.route('/quickeditarticle',methods=['POST'])
+@requires_auth
+def quickEditArticle():
+    title = request.form['article_title']
+
+@app.route('/update_article',methods=['POST'])
+@requires_auth
+def updateArticle():
+    title = request.form['article_title']
+
+@app.route('/move_article_to_trash',methods=['POST'])
+@requires_auth
+def moveToTrash():
+    title = request.form['article_title']
 
 @app.route('/test')
 def test_anything():

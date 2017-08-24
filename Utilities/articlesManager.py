@@ -60,6 +60,7 @@ def getBrief(raw_article):
         raw_article[2] = raw_article[2][:200]
     return raw_article
 
+
 def replaceSpecialCharters(raw):
     charset = globeVar.ARTICLES_SPECIAL_CHAR.keys()
     for ch in charset:
@@ -80,3 +81,10 @@ def getArticlesList(num):
         return list(map(getBrief,result))
     return result
 
+def getArticlesListD(start,num):
+    sql = "SELECT * FROM `articles` ORDER BY `DATE` DESC LIMIT %s,%s"%(start,num)
+    result = [list(article) for article in  runSQL.runSelect(sql)]
+    if len(result) > 0:
+        result = list(map(getBrief,result))
+        return result
+    return result

@@ -1,7 +1,7 @@
 {% extends "admin_template.html" %} {% block title %}myblog 管理中心{% endblock %} {% block content %}
 <div class="row">
-    <div class="col-md-3">
-        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" style="background:white;">
+    <div class="col-md-2 padding-lr-0" style="max-Width:230px;">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" style="background:white;text-align:center;">
             <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#cat_homt" role="tab" aria-controls="v-pills-home"
                 aria-expanded="true">主面板</a>
             <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#cat_articles" role="tab" aria-controls="v-pills-profile"
@@ -18,7 +18,7 @@
             {% import 'macros_build_index.html' as index %}
         </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-10 padding-lr-0">
         <div class="tab-content" id="v-pills-tabContent">
             <div class="tab-pane fade show active" id="cat_homt" role="tabpanel" aria-labelledby="v-pills-home-tab">
                 <div class="container">
@@ -47,6 +47,43 @@
                     <div class="card bg-light mb-3" style="max-width: 100%;">
                         <div class="card-header">文章管理</div>
                         <div class="card-body">
+                            <div class="row">
+                                <div class="modal fade" id="modal_quick_edit_article" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel2">快速编辑文章信息</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="form_quick_edit_article">
+                                                    <div class="form-group">
+                                                        <label for="edit_article_title" class="form-control-label">文章名:</label>
+                                                        <input type="text" name="edit_article_title" class="form-control" id="edit_article_title">
+                                                        <input type="text" name="id" class="form-control" id="edit_article_id" style="display:none;">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="edit_article_cate" class="form-control-label">文章分类:</label>
+                                                        <select class="form-control col-sm-3" name="article_cate" id="edit_article_cate">
+                                                            <option>未分类</option>
+                                                            </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="edit_article_url" class="form-control-label">文章URL:</label>
+                                                        <input type="text" name="url" class="form-control" id="edit_article_url">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消更改</button>
+                                                <button type="button" class="btn btn-primary" onclick="changeCate('submit')">确认更改</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <button type="button" class="btn btn-outline-primary col-sm-2" onclick="window.location.href='/admin/newpost'">撰写新文章</button>
                                 <label for="inputPassword" class="col-sm-2 col-form-label">搜索文章：</label>
@@ -56,10 +93,25 @@
                                 <button type="button" class="btn btn-outline-primary col-sm-2" onclick="addCate()">搜索</button>
                             </div>
                             <div class="row">
+                                <nav aria-label="change page of articles" style="margin:0 auto;">
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1">前一页</a>
+                                        </li>
+                                        {% set AOP = 15 %} {% set p = BASIC_INFO[0] // AOP %} {% if (BASIC_INFO[0] % AOP) > 0 %} {% set p = p + 1 %} {% endif %}
+                                        {% set i = 0 %} {% for i in range(p) %}
+                                        <li class="page-item"><a class="page-link" href="/admin/page/{{i+1}}">{{i+1}}</a></li>
+                                        {% set i = i + 1 %} {% endfor %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="#">后一页</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <div class="row">
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
                                             <th>文章名</th>
                                             <th>文章分类</th>
                                             <th>链接</th>
@@ -67,7 +119,7 @@
                                             <th>操作</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="article_list">
                                         {{index.buildArticleList('id','name','article_count','url','0')}}
                                     </tbody>
                                 </table>
@@ -76,7 +128,36 @@
                     </div>
                 </div>
                 <script>
-                    function modifyArticle(id) {}
+                    var articles_on_page = 15;
+
+                    function parseArticleList(data) {
+                        article_list = eval(data);
+                        console.log(article_list);
+                        var dstr = "";
+                        // date sequence: ID,TITLE,CONTENT,CATE,KEYWORDS,URL,READINGS,DATE,DRAFT,TRASH
+                        for (i = 0; i < article_list.length; i++) {
+                            if (article_list[i].length < 4) {
+                                continue;
+                            }
+                            var s =
+                                `<tr>
+                                    <th scope="row">${article_list[i][1]}</th>
+                                    <td>${article_list[i][3]}</td>
+                                    <td><a href="/article/${article_list[i][5]}" target="_blank">→</a></td>
+                                    <td>${article_list[i][6]}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-info btn-sm" onclick="modifyArticle('${article_list[i][0]}')">快速编辑</button>
+                                    <button type="button" class="btn btn-primary btn-sm" onclick="editArticle('${article_list[i][0]}')">修改</button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteArticle('${article_list[i][0]}')">删除</button></td>
+                                </tr>`;
+                            dstr += s;
+                        }
+                        document.getElementById("article_list").innerHTML = dstr;
+                    }
+
+                    function modifyArticle(id) {
+                        $('#modal_quick_edit_article').modal('toggle');
+                    }
 
                     function editArticle(id) {}
 
@@ -86,6 +167,10 @@
 
                     function searchArticle() {
 
+                    }
+
+                    function getArticleList() {
+                        Getdata("/get/articles/admin/0", parseArticleList);
                     }
                 </script>
             </div>
@@ -109,7 +194,7 @@
                                                     <div class="form-group">
                                                         <label for="edit_cate_name_label" class="form-control-label">分类名:</label>
                                                         <input type="text" name="new_cate_name" class="form-control" id="edit_cate_name_label">
-                                                        <input type="text" name="id" class="form-control" id="edit_cate_id" style="display:none;" >
+                                                        <input type="text" name="id" class="form-control" id="edit_cate_id" style="display:none;">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="edit_cate_url_label" class="form-control-label">分类URL:</label>
@@ -158,16 +243,17 @@
                 </div>
                 <script>
                     var cate_list = [];
+
                     function changeCate(id) {
-                        if(id=="submit"){
-                            SubmitForm("/updateCate","form_edit_cate","修改失败！","修改成功！",function success(){
+                        if (id == "submit") {
+                            SubmitForm("/updateCate", "form_edit_cate", "修改失败！", "修改成功！", function success() {
                                 $('#modal_edit_cate').modal('toggle');
                                 reload();
                             });
-                        }else{
+                        } else {
                             $('#modal_edit_cate').modal('toggle');
-                            cate_list.forEach(function(element) {
-                                if(element[0] == id){
+                            cate_list.forEach(function (element) {
+                                if (element[0] == id) {
                                     $("#edit_cate_id").val(id);
                                     $("#edit_cate_name_label").val(element[1]);
                                     $("#edit_cate_url_label").val(element[3]);
@@ -179,7 +265,7 @@
                     function deleteCate(id) {
                         postData("/deleteCate", {
                             "id": id
-                        }, "删除失败！", "删除成功！",reload);
+                        }, "删除失败！", "删除成功！", reload);
                     }
 
                     function addCate() {
@@ -190,7 +276,7 @@
                             showMsg("请输入有效的分类名或URL！<br>长度均需大于2。", 5);
                             return false;
                         }
-                        SubmitForm("/addCate", "add_new_cate", "分类添加失败！存在相同的URL或名称", "分类添加成功！",reload);
+                        SubmitForm("/addCate", "add_new_cate", "分类添加失败！存在相同的URL或名称", "分类添加成功！", reload);
                         return true;
                     }
 
@@ -217,7 +303,7 @@
                         document.getElementById("table_cate_list").innerHTML = dstr;
                     }
 
-                    function reload(){
+                    function reload() {
                         Getdata("/get/allcates", getAllCates);
                     }
                 </script>
@@ -292,10 +378,12 @@
         document.body.style.backgroundColor = "#eceff1";
         document.getElementById("superdiv").style.marginLeft = "0px";
         document.getElementById("superdiv").style.paddingLeft = "0px";
+        document.getElementById("superdiv").style.marginRight = "0px";
+        document.getElementById("superdiv").style.maxWidth = "4000px";
         //getting data
         showMsg("获取数据...", 5);
         Getdata("/get/allcates", getAllCates);
-
+        getArticleList();
     });
 </script>
 {% endblock %}
