@@ -6,6 +6,17 @@ SUCCESS = "OK"
 UNSUCCESS = "U"
 VARS = {}
 
+ARTICLES_SPECIAL_CHAR = {
+    "\"":"xASC_DQ",
+    "'":"xASC_SQ",
+    "`":"xASC_CQ",
+    "&":"xASC_AND",
+    ")":"xASC_RS",
+    "(":"xASC_LS",
+    "[":"xASC_RR",
+    "]":"xASC_LR",
+}
+
 def loadConfig():
     """
     This function is used to load config file from path in ./config/config.py

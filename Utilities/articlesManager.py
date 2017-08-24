@@ -1,5 +1,5 @@
 from time import gmtime, strftime,time
-import base64
+from Utilities import globeVar
 from Utilities import runSQL
 
 def addNewArticle(title,cate,content,keywords,url,draft=False):
@@ -11,6 +11,7 @@ def addNewArticle(title,cate,content,keywords,url,draft=False):
             cate = "未分类"
         sql_update_count = "UPDATE `categories` SET `CACOUNT`=`CACOUNT`+1 WHERE `CNAME`='%s'"%cate
         if draft:
+            content = replaceSpecialCharters(content)
             sql = "INSERT INTO `articles`\
                     (`ATITLE`, `ACONTENT`, `ACATEGORY`, `AKEYWORDS`, `AURL`, `AREADINGS`, `DATE`,`DRAFT`,`TRASH`)\
                      VALUES ('%s','%s','%s','%s','%s',0,'%s',1,0)"%(title,content,cate,keywords,url,timestr)
@@ -18,7 +19,7 @@ def addNewArticle(title,cate,content,keywords,url,draft=False):
                 return True
             return False,"保存草稿失败，请稍后重试！"
         else:
-            #content = base64.encodestring(content.encode("utf-8"))
+            content = replaceSpecialCharters(content)
             sql = "INSERT INTO `articles`\
                     (`ATITLE`, `ACONTENT`, `ACATEGORY`, `AKEYWORDS`, `AURL`, `AREADINGS`, `DATE`,`DRAFT`,`TRASH`)\
                      VALUES ('%s','%s','%s','%s','%s',0,'%s',0,0)"%(title,content,cate,keywords,url,timestr)
@@ -51,12 +52,26 @@ def getArticleByURL(url):
         return False,"文章不存在",""
     if result[0][8] == 1 or result[0][9] == 1:
         return False,"文章不可用！",""
-    return True,result[0],result[0][2]#base64.decodestring(result[0][2])
+    return True,result[0],restoreSpecialCharacter(result[0][2])
 
 def getBrief(raw_article):
+    raw_article[2] = restoreSpecialCharacter(raw_article[2])
     if len(raw_article[2])>200:
         raw_article[2] = raw_article[2][:200]
     return raw_article
+
+def replaceSpecialCharters(raw):
+    charset = globeVar.ARTICLES_SPECIAL_CHAR.keys()
+    for ch in charset:
+        raw = raw.replace(ch,globeVar.ARTICLES_SPECIAL_CHAR[ch])
+    return raw
+
+def restoreSpecialCharacter(ss):
+    xcharset = globeVar.ARTICLES_SPECIAL_CHAR.values()
+    inv_map = {v: k for k, v in globeVar.ARTICLES_SPECIAL_CHAR.items()}
+    for ch in xcharset:
+        ss = ss.replace(ch,inv_map[ch])
+    return ss
 
 def getArticlesList(num):
     sql = "SELECT * FROM `articles` ORDER BY `DATE` DESC LIMIT %s"%num
@@ -64,3 +79,4 @@ def getArticlesList(num):
     if len(result) > 0:
         return list(map(getBrief,result))
     return result
+
