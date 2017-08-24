@@ -58,7 +58,7 @@ def requires_auth(f):
 def admin():
     session = request.cookies.get("session")
     if adminManager.checkSession(session):
-        return render_template("admin_center.html",BASIC_INFO=othersManager.getBasicInfo())
+        return render_template("admin_center.html",BASIC_INFO=othersManager.getBasicInfo(),CATES=categoryManager.getAllCates())
     else:
         return render_template("admin_login.html",ERROR=True)
 
@@ -67,6 +67,14 @@ def admin():
 def newpost():
     cates = categoryManager.getAllCates()
     return render_template("admin_new_article.html",CATES=cates)
+
+@app.route('/editpost/<xid>')
+@requires_auth
+def editpost(xid):
+    cates = categoryManager.getAllCates()
+    code,data,content = articlesManager.getArticleByID(xid)
+    return render_template("admin_new_article.html",CATES=cates,EDIT=True,\
+                        ETITLE=data[1],ECONTENT=content,EKEYWORDS=data[4],EURL=data[5],CATE=data[3])
 
 # >>GET INTERFACE
 @app.route('/get/allcates')
@@ -155,7 +163,13 @@ def publishArticle():
 @app.route('/quickeditarticle',methods=['POST'])
 @requires_auth
 def quickEditArticle():
-    title = request.form['article_title']
+    title = request.form['edit_article_title']
+    cate = request.form['article_cate']
+    url = request.form['url']
+    xid = request.form['id']
+    if articlesManager.quickEditArticle(xid,title,cate,url):
+        return globeVar.SUCCESS
+    return globeVar.UNSUCCESS
 
 @app.route('/update_article',methods=['POST'])
 @requires_auth
@@ -165,7 +179,10 @@ def updateArticle():
 @app.route('/move_article_to_trash',methods=['POST'])
 @requires_auth
 def moveToTrash():
-    title = request.form['article_title']
+    xid = request.form['id']
+    if articlesManager.deleteArticle(xid):
+        return globeVar.SUCCESS
+    return globeVar.UNSUCCESS
 
 @app.route('/test')
 def test_anything():

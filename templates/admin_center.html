@@ -67,7 +67,9 @@
                                                     <div class="form-group">
                                                         <label for="edit_article_cate" class="form-control-label">文章分类:</label>
                                                         <select class="form-control col-sm-3" name="article_cate" id="edit_article_cate">
-                                                            <option>未分类</option>
+                                                                {% for cat in CATES %}
+                                                                <option>{{cat[1]}}</option>
+                                                                {% endfor %}
                                                             </select>
                                                     </div>
                                                     <div class="form-group">
@@ -78,7 +80,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">取消更改</button>
-                                                <button type="button" class="btn btn-primary" onclick="changeCate('submit')">确认更改</button>
+                                                <button type="button" class="btn btn-primary" onclick="modifyArticle('submit')">确认更改</button>
                                             </div>
                                         </div>
                                     </div>
@@ -129,6 +131,7 @@
                 </div>
                 <script>
                     var articles_on_page = 15;
+                    var article_list;
 
                     function parseArticleList(data) {
                         article_list = eval(data);
@@ -140,7 +143,7 @@
                                 continue;
                             }
                             var s =
-                                `<tr>
+                                `<tr id="article_${article_list[i][0]}">
                                     <th scope="row">${article_list[i][1]}</th>
                                     <td>${article_list[i][3]}</td>
                                     <td><a href="/article/${article_list[i][5]}" target="_blank">→</a></td>
@@ -156,13 +159,34 @@
                     }
 
                     function modifyArticle(id) {
-                        $('#modal_quick_edit_article').modal('toggle');
+                        if (id == "submit") {
+                            SubmitForm("/quickeditarticle", "form_quick_edit_article", "修改失败！", "修改成功！", function success() {
+                                $('#modal_quick_edit_article').modal('toggle');
+                                getArticleList();
+                            });
+                        } else {
+                            $('#modal_quick_edit_article').modal('toggle');
+                            article_list.forEach(function (element) {
+                                if (element[0] == id) {
+                                    $("#edit_article_id").val(id);
+                                    $("#edit_article_title").val(element[1]);
+                                    $("#edit_article_cate").val(element[3]);
+                                    $("#edit_article_url").val(element[5]);
+                                }
+                            }, this);
+                        }
                     }
 
-                    function editArticle(id) {}
+                    function editArticle(id) {
+                        window.location.href = "/editpost/"+id;
+                    }
 
                     function deleteArticle(id) {
-
+                        postData("/move_article_to_trash", {
+                            "id": id
+                        }, "删除失败！请稍后重试！", "文章已删除", function d() {
+                            $("#article_" + id).remove();
+                        });
                     }
 
                     function searchArticle() {

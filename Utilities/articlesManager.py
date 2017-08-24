@@ -39,14 +39,32 @@ def checkEssentialInfo(url):
         return False
     return True
 
-def updateArticle():
+def quickEditArticle(xid,title,cate,url):
+    sql = "UPDATE `articles` SET `ATITLE`='%s',`ACATEGORY`='%s',`AURL`='%s' WHERE `AID`=%s"%(title,cate,url,str(xid))
+    if runSQL.runUpdate(sql):
+        return True
+    return False
+
+def updateArticle(id,title,cate,url):
     pass
 
-def deleteArticle():
-    pass
+def deleteArticle(xid):
+    sql = "DELETE FROM `articles` WHERE `AID`="+str(xid)
+    if runSQL.runDelete(sql):
+        return True
+    return False
 
 def getArticleByURL(url):
     sql = "SELECT * FROM `articles` WHERE `AURL`='%s'"%url
+    result = runSQL.runSelect(sql)
+    if len(result) == 0:
+        return False,"文章不存在",""
+    if result[0][8] == 1 or result[0][9] == 1:
+        return False,"文章不可用！",""
+    return True,result[0],restoreSpecialCharacter(result[0][2])
+
+def getArticleByID(xid):
+    sql = "SELECT * FROM `articles` WHERE `AID`='%s'"%xid
     result = runSQL.runSelect(sql)
     if len(result) == 0:
         return False,"文章不存在",""

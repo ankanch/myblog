@@ -33,6 +33,7 @@ function SubmitForm(url, formid, error_msg, success_msg, success_func) {
     });
 }
 
+
 function postData(url, data_dic, error_msg, success_msg) {
     // function from https://stackoverflow.com/questions/25983603/how-to-submit-html-form-without-redirection
     $.ajax({
