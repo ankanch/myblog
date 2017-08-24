@@ -19,7 +19,9 @@ print(ConfigDict)
 @app.route('/')
 def index():
     al = articlesManager.getArticlesList(5)
-    return render_template("index.html",TITLE=ConfigDict["SITE_TITLE"],NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,AC=al)
+    cate = categoryManager.getAllCates()
+    return render_template("index.html",TITLE=ConfigDict["SITE_TITLE"],NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,\
+                            AC=al,CATE=cate)
 
 @app.route('/<url>')
 def xRoute(url):
@@ -30,11 +32,13 @@ def xRoute(url):
 
 @app.route('/article/<url>')
 def showArticle(url):
+    al = articlesManager.getArticlesList(5)
+    cate = categoryManager.getAllCates()
     code,data,content = articlesManager.getArticleByURL(url)
     if code:
         return render_template("article.html",\
                 ATITLE=data[1],CATES=data[3],DATE=data[7],READINGS=data[6],CONTENT=content,\
-                NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION)
+                NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,AC=al,CATE=cate)
     return render_template("error_404.html")
 
 # >>WRAPS of FLASK

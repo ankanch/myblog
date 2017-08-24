@@ -124,7 +124,7 @@
             showMsg("请填完 文章链接 后，再发布！",3);
             return false;
         }
-        SubmitForm ("/publish","article_data","发布或保存草稿失败！请重试。","发布或保存草稿成功！",function re(url){
+        SubmitForm ("/publish","article_data","发布或保存草稿失败！请重试。","发布或保存草稿成功！",function re(){
             window.location.href = "/article/"+url;
         });
     }
