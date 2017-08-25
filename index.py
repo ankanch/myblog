@@ -96,6 +96,12 @@ def getArticles(where,page_start):
 
 # >>POST INTERFACE
 
+@app.route('/search',methods=['POST','GET'])
+def search():
+    key = request.form['key']
+    result = articlesManager.searchArticle(key)
+    return render_template("search_result.html",NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,DATA=result)
+
 @app.route('/adminlogin',methods=['POST','GET'])
 def adminlogin():
     if request.method == 'POST':

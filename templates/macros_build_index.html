@@ -35,3 +35,16 @@
         <button type="button" class="btn btn-danger btn-sm" onclick="deleteArticle('{{id}}')">删除</button></td>
 </tr>
 {%- endmacro %}
+
+{% macro buildSearchResult(title, brief, date,url) -%}
+<div class="row margin-lr-0" style="margin-bottom:30px;">
+<div class="card " style="width: 100%;">
+  <div class="card-body">
+    <h4 class="card-title">{{title}}</h4>
+    <h6 class="card-subtitle mb-2 text-muted">{{date}}</h6>
+    <p class="card-text">{{brief}}</p>
+    <a href="/article/{{url}}" class="card-link">阅读更多</a>
+  </div>
+</div>
+</div>
+{%- endmacro %}
