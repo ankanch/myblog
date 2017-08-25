@@ -5,12 +5,9 @@
             aria-expanded="true">预览窗口</a>
         <a class="nav-item nav-link" id="v-pills-image-manager" data-toggle="pill" href="#article_image_manager" role="tab" aria-controls="v-pills-profile"
             aria-expanded="true">媒体管理</a>
-        <a class="nav-item nav-link disabled">myblog v0.1</a>
-        {% if EDIT %}
-        <a class="btn btn-outline-success" style="margin-right:5px;" id="v-pills-settings-tab" href="javascript:publish()">保存更改</a>
-        {% else %}
-        <a class="btn btn-outline-success" style="margin-right:5px;" id="v-pills-settings-tab" href="javascript:publish()">发布文章</a>
-        {% endif %}
+        <a class="nav-item nav-link disabled">myblog v0.1</a> {% if EDIT %}
+        <a class="btn btn-outline-success" style="margin-right:5px;" id="v-pills-settings-tab" href="javascript:saveChange()">保存更改</a>        {% else %}
+        <a class="btn btn-outline-success" style="margin-right:5px;" id="v-pills-settings-tab" href="javascript:publish()">发布文章</a>        {% endif %}
         <a class="btn btn btn-outline-secondary" style="margin-right:5px;" id="v-pills-settings-tab" href="javascript:saveDraft()">保存草稿</a>
         <a class="btn btn-outline-warning" style="margin-right:5px;" id="v-pills-settings-tab" href="javascript:returnControlCenter()">返回</a>
         <div class="row" style="display:none">
@@ -37,6 +34,7 @@
                                         {% endfor %}
                                     </select>
                                 <input type="text" class="form-control col-sm-9" value="{{ETITLE}}" name="article_title" id="article_title" placeholder="文章标题">
+                                <input type="text" class="form-control col-sm-9" value="{{EAID}}" name="id" style="display: none;" placeholder="id">
                             </div>
                             <div class="row margin-lr-0" style="width:100%">
                                 function panel
@@ -112,7 +110,7 @@
         window.location.href = "/myblog/admin";
     }
 
-    function publish() {
+    function checkInput() {
         var title = document.getElementById("article_title").value,
             content = document.getElementById("article_content").value,
             keywords = document.getElementById("article_keywords").value,
@@ -133,9 +131,25 @@
             showMsg("请填完 文章链接 后，再发布！", 3);
             return false;
         }
-        SubmitForm("/publish", "article_data", "发布或保存草稿失败！请重试。", "发布或保存草稿成功！", function re() {
-            window.location.href = "/article/" + url;
-        });
+        return true;
+    }
+
+    function publish() {
+        if (checkInput()) {
+            var url = document.getElementById("article_url").value;
+            SubmitForm("/publish", "article_data", "发布或保存草稿失败！请重试。", "发布或保存草稿成功！", function re() {
+                window.location.href = "/article/" + url;
+            });
+        }
+    }
+
+    function saveChange() {
+        if (checkInput()) {
+            var url = document.getElementById("article_url").value;
+            SubmitForm("/update_article", "article_data", "文章修改失败！请重试。", "文章更新成功！", function re() {
+                window.location.href = "/article/" + url;
+            });
+        }
     }
 
     function saveDraft() {

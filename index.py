@@ -73,7 +73,7 @@ def newpost():
 def editpost(xid):
     cates = categoryManager.getAllCates()
     code,data,content = articlesManager.getArticleByID(xid)
-    return render_template("admin_new_article.html",CATES=cates,EDIT=True,\
+    return render_template("admin_new_article.html",CATES=cates,EDIT=True,EAID=data[0],\
                         ETITLE=data[1],ECONTENT=content,EKEYWORDS=data[4],EURL=data[5],CATE=data[3])
 
 # >>GET INTERFACE
@@ -174,7 +174,16 @@ def quickEditArticle():
 @app.route('/update_article',methods=['POST'])
 @requires_auth
 def updateArticle():
+    xid = request.form['id']
     title = request.form['article_title']
+    cate = request.form['article_cate']
+    content = request.form['article_content']
+    keywords = request.form['article_keywords']
+    url = request.form['article_url']
+    code,why = articlesManager.updateArticle(xid,title,cate,content,keywords,url)
+    if code:
+        return globeVar.SUCCESS
+    return globeVar.UNSUCCESS
 
 @app.route('/move_article_to_trash',methods=['POST'])
 @requires_auth

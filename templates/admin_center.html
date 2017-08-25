@@ -339,10 +339,20 @@
                         <div class="card-body">
                             <form action="/changesiteinfo" method="post" style="max-width:100%;margin:0 auto;">
                                 <div class="row">
-                                    <label for="site_name" class="col-sm-2 col-form-label">站点名：</label>
-                                    <div class="col-sm-3">
+                                    <label for="site_name" class="col-md-2 col-form-label">站点名：</label>
+                                    <div class="col-md-3">
                                         <input type="text" class="form-control" id="site_name" value="akakanch" placeholder="站点名">
                                     </div>
+                                    <label for="site_copyright" class="col-md-2 col-form-label">底部版权信息：</label>
+                                    <div class="col-md-3">
+                                        <input type="text" class="form-control" id="site_copyright" value="akakanch" placeholder="纯文本的底部版权信息">
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:10px;">
+                                        <label for="site_name" class="col-md-2 col-form-label">站点底部信息</label>
+                                        <div class="col-md-10">
+                                        <textarea class="form-control" name="site_footer" id="site_footer" rows="3" placeholder="在这里输入版权等内容，支持全HTML">{{ECONTENT}}</textarea>
+                                        </div>
                                 </div>
                                 <div style="text-align:center;">
                                     <button type="submit" class="btn btn-outline-primary">储存</button>

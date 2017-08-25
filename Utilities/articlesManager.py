@@ -30,6 +30,13 @@ def addNewArticle(title,cate,content,keywords,url,draft=False):
             return False,"文章发布失败，请稍后重试！"
     return False,"文章和已经发布的文章具有相同的URL"
 
+def updateArticle(xid,title,cate,content,keywords,url):
+    content = replaceSpecialCharters(content)
+    sql = "UPDATE `articles` SET `ATITLE`='%s',`ACONTENT`='%s',`ACATEGORY`='%s',`AKEYWORDS`='%s',`AURL`='%s',\
+            `DRAFT`=0,`TRASH`=0 WHERE `AID`=%s"%(title,content,cate,keywords,url,xid)
+    if runSQL.runInsert(sql):
+        return True,"文章更新成功"
+    return False,"文章更新失败，请稍后重试！"
     
 
 def checkEssentialInfo(url):
@@ -40,13 +47,10 @@ def checkEssentialInfo(url):
     return True
 
 def quickEditArticle(xid,title,cate,url):
-    sql = "UPDATE `articles` SET `ATITLE`='%s',`ACATEGORY`='%s',`AURL`='%s' WHERE `AID`=%s"%(title,cate,url,str(xid))
+    sql = "UPDATE `articles` SET `ATITLE`='%s',`ACATEGORY`='%s',`AURL`='%s' WHERE `AID`=%d"%(title,cate,url,str(xid))
     if runSQL.runUpdate(sql):
         return True
     return False
-
-def updateArticle(id,title,cate,url):
-    pass
 
 def deleteArticle(xid):
     sql = "DELETE FROM `articles` WHERE `AID`="+str(xid)
