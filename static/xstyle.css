@@ -35,3 +35,27 @@
     margin-top: 30px;
     background-color: #222;
 }
+
+.sidebar-header{
+    text-align: left;
+    padding-left: 15px;
+    background: white;
+    border-bottom: 3px solid;
+    border-left: 3px solid;
+    border-bottom-color: #aeafae;
+    border-left-color: #aeafae;
+    -webkit-transform: skew(20deg);
+    -moz-transform: skew(20deg);
+    -o-transform: skew(20deg);
+    overflow: hidden;
+}
+
+.sidebar-header-title{
+    text-align: left;
+    padding-left: 15px;
+    background: white;
+    -webkit-transform: skew(-20deg);
+    -moz-transform: skew(-20deg);
+    -o-transform: skew(-20deg);
+}
+
