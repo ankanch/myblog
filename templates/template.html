@@ -37,9 +37,14 @@
                         <a class="nav-link" href="/">主页 <span class="sr-only">(current)</span></a>
                     </li>
                     {% for key, value in NAVIGATION_BAR.items(): %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{key}}">{{value[0]}}</a>
-                    </li>
+                    {% set current = loop.index %}
+                        {% for key, value in NAVIGATION_BAR.items(): %}
+                            {% if value[2] == current %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{key}}">{{value[0]}}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
                     {% endfor %}
                 </ul>
                 <form class="form-inline my-2 my-lg-0" id="form_search" action="/search" method="post">
