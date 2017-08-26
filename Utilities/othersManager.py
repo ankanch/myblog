@@ -32,6 +32,6 @@ def setSiteSettingInfo(name,value):
 def saveSiteSettingInfoChanges():
     raw_str = ""
     for k,v in globeVar.VARS.items():
-        raw_str += k + v[1]  + str(v[0]) + "\r\n"
-    with open(CFG.VAR_CONFIG_FILE,"w") as ff:
+        raw_str += v[1] + k + "=" + str(v[0]) + "\r\n"
+    with open(CFG.VAR_CONFIG_FILE,"w",encoding='utf-8') as ff:
         ff.write(raw_str)
