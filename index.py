@@ -15,6 +15,7 @@ app = Flask(__name__)
 
 # init 
 ConfigDict =  globeVar.VARS
+print(ConfigDict)
 
 @app.route('/')
 def index():
