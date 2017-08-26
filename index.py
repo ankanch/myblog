@@ -103,6 +103,12 @@ def getArticles(where,page_start):
         data = articlesManager.getArticlesListD(page_start*15,15)
         return json.dumps(data)
 
+@app.route('/admin/exit/<session>')
+def exitAdmin(session):
+    if adminManager.deleteSession(session):
+        return globeVar.SUCCESS
+    return globeVar.UNSUCCESS
+
 # >>POST INTERFACE
 
 @app.route('/search',methods=['POST','GET'])
@@ -208,6 +214,17 @@ def moveToTrash():
     if articlesManager.deleteArticle(xid):
         return globeVar.SUCCESS
     return globeVar.UNSUCCESS
+
+@app.route('/changeadmininfo',methods=['POST'])
+@requires_auth
+def changeadmininfo():
+    uname = request.form['username']
+    old_pwm = request.form['old_pwd']
+    new_pwm = request.form['new_pwm']
+    if adminManager.changeAdminPassword(uname,old_pwm,new_pwm):
+        return globeVar.SUCCESS
+    return globeVar.UNSUCCESS
+
 
 @app.route('/test')
 def test_anything():

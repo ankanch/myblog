@@ -109,3 +109,13 @@ def getAdminSessions():
     result = runSQL.runSelect(sql)
     session_list = parseSessions(result[0][0].replace("\n","").replace("\r",""))
     return session_list,result
+
+
+def changeAdminPassword(uname,old,new):
+    sql = "SELECT * FROM `admin` WHERE `USERNAME`='%s'"%uname
+    result = runSQL.runSelect(sql)[0]
+    if result[0] == uname and old == result[1]:
+        sql = "UPDATE `admin` SET `PASSWORD`='%s' WHERE `USERNAME`='%s'"%(new,uname)
+        if runSQL.runUpdate(sql):
+            return True
+    return False

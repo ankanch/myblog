@@ -47,7 +47,7 @@ def checkEssentialInfo(url):
     return True
 
 def quickEditArticle(xid,title,cate,url):
-    sql = "UPDATE `articles` SET `ATITLE`='%s',`ACATEGORY`='%s',`AURL`='%s' WHERE `AID`=%d"%(title,cate,url,str(xid))
+    sql = "UPDATE `articles` SET `ATITLE`='%s',`ACATEGORY`='%s',`AURL`='%s' WHERE `AID`=%s"%(title,cate,url,str(xid))
     if runSQL.runUpdate(sql):
         return True
     return False

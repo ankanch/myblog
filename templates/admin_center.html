@@ -369,23 +369,23 @@
                     <div class="card text-white bg-danger mb-3" style="max-width: 100%;">
                         <div class="card-header">用户管理</div>
                         <div class="card-body">
-                            <form action="/changeadmininfo" method="post" style="max-width:100%;margin:0 auto;">
+                            <form action="/changeadmininfo" method="post" style="max-width:100%;margin:0 auto;" id="change_password">
                                 <div class="row">
                                     <label for="username" class="col-sm-2 col-form-label">用户名：</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control" id="username" value="kanch96" placeholder="用户名">
+                                        <input type="text" class="form-control" name="username" id="username" value="" placeholder="请输入您的用户名">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <label for="old_pwd" class="col-sm-2 col-form-label">旧密码：</label>
                                     <div class="col-sm-3">
-                                        <input type="password" class="form-control" id="old_pwd" placeholder="旧密码">
+                                        <input type="password" class="form-control" name="old_pwd" id="old_pwd" placeholder="旧密码">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <label for="new_pwm" class="col-sm-2 col-form-label">新密码：</label>
                                     <div class="col-sm-3">
-                                        <input type="password" class="form-control" id="new_pwm" placeholder="新密码">
+                                        <input type="password" class="form-control" name="new_pwm" id="new_pwm" placeholder="新密码">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -395,13 +395,34 @@
                                     </div>
                                 </div>
                                 <div style="text-align:center;">
-                                    <button type="submit" class="btn btn-outline-primary">储存</button>
+                                    <button type="button" class="btn btn-outline-primary" onclick="changePassword()">储存</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
                 <script>
+                    function changePassword(){
+                        var uname = $("#username").val(),
+                            old = $("#old_pwd").val(),
+                            newp = $("#new_pwm").val(),
+                            newp2 = $("#confirm_new_pwm").val();
+                        if(uname.length < 1 || old.length <1 || newp.length < 1 || newp2.length<1){
+                            showMsg("请输入完所有必要信息！",5);
+                            return false;
+                        }
+                        if(newp != newp2){
+                            showMsg("新密码不匹配！",5);
+                            return false;
+                        }
+                        SubmitForm("/changeadmininfo", "change_password", "密码修改失败！", "密码修改成功！", function f(){
+                            $("#username").val("");
+                            $("#old_pwd").val("");
+                            $("#new_pwm").val("");
+                            $("#confirm_new_pwm").val("");
+                        });
+                        return true;
+                    }
                 </script>
             </div>
         </div>
