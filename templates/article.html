@@ -1,12 +1,13 @@
 {% extends "template_with_sidebar.html" %} {% block title %}{{TITLE}}{% endblock %} {% block content %}
 
-<div class="row margin-lr-0">
-    <h1>{{ATITLE}}</h1>
-</div>
-<div class="row margin-lr-0">
-    <h6 style="color:grey;font-style:italic;">{{DATE}}</h6>
-    <h6 style="color:grey;">{{CATES}}</h6>
-    <h6 style="color:grey;">浏览量：{{READINGS}}</h6>
+<!--div class="row margin-lr-0 article-titlebox">
+        <h1 class="article-titletext">{{ATITLE}}</h1>
+        Title in template_with_sidebar.html
+    </div-->
+<div class="row margin-lr-0 article-infobox">
+    <h6 class="article-info" style="color:grey;font-style:italic;">{{DATE}}</h6>
+    <h6 class="article-info" style="color:grey;">{{CATES}}</h6>
+    <h6 class="article-info" style="color:grey;">浏览量：{{READINGS}}</h6>
 </div>
 <div class="margin-lr-0" id="article_content">
     {{CONTENT}}

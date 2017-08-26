@@ -26,6 +26,7 @@ def index():
 
 @app.route('/<url>')
 def xRoute(url):
+    url=  "/" + url
     if url in urlmap.URLMAP_NAVIGATION.keys():
         return render_template(urlmap.URLMAP_NAVIGATION[url][1])
     else:
