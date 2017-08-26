@@ -2,7 +2,7 @@ from time import gmtime, strftime,time
 from Utilities import runSQL
 from Utilities import globeVar
 
-SESSION_EXPIRES = 3600*int(globeVar.VARS["LOGIN_EXPIRES"])
+SESSION_EXPIRES = 3600*int(globeVar.VARS["LOGIN_EXPIRES"][0])
 
 def getLastLogin():
     sql = "SELECT `LASTLOGIN` FROM `admin` WHERE 1"

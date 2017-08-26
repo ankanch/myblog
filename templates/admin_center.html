@@ -12,6 +12,7 @@
                 aria-expanded="true">站点管理</a>
             <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#cat_admin" role="tab" aria-controls="v-pills-settings"
                 aria-expanded="true">用户管理</a>
+            <a class="nav-link" href="/" target="_blank">查看站点</a>
             <a class="nav-link disabled">myblog v0.1</a>
         </div>
         <div class="row" style="display:none">
@@ -337,31 +338,34 @@
                     <div class="card bg-light mb-3" style="max-width: 100%;">
                         <div class="card-header">站点管理</div>
                         <div class="card-body">
-                            <form action="/changesiteinfo" method="post" style="max-width:100%;margin:0 auto;">
+                            <form  method="post" style="max-width:100%;margin:0 auto;" id="site_info">
                                 <div class="row">
                                     <label for="site_name" class="col-md-2 col-form-label">站点名：</label>
                                     <div class="col-md-3">
-                                        <input type="text" class="form-control" id="site_name" value="akakanch" placeholder="站点名">
+                                        <input type="text" class="form-control" id="site_name" name="site_name" value="{{SITE_INFO[0]}}" placeholder="站点名">
                                     </div>
                                     <label for="site_copyright" class="col-md-2 col-form-label">底部版权信息：</label>
                                     <div class="col-md-3">
-                                        <input type="text" class="form-control" id="site_copyright" value="akakanch" placeholder="纯文本的底部版权信息">
+                                        <input type="text" class="form-control" id="site_copyright" name="site_copyright" value="{{SITE_INFO[1]}}" placeholder="纯文本的底部版权信息">
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top:10px;">
                                         <label for="site_name" class="col-md-2 col-form-label">站点底部信息</label>
                                         <div class="col-md-10">
-                                        <textarea class="form-control" name="site_footer" id="site_footer" rows="3" placeholder="在这里输入版权等内容，支持全HTML">{{ECONTENT}}</textarea>
+                                        <textarea class="form-control" name="site_footer_html" id="site_footer_html" rows="3" placeholder="在这里输入版权等内容，支持全HTML"></textarea>
                                         </div>
                                 </div>
                                 <div style="text-align:center;">
-                                    <button type="submit" class="btn btn-outline-primary">储存</button>
+                                    <button type="button" class="btn btn-outline-primary" onclick="saveSiteInfo()">储存</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
                 <script>
+                    function saveSiteInfo(){
+                        SubmitForm("/changesiteinfo","site_info","站点信息更新失败！","站点信息更新成功！");
+                    }
                 </script>
             </div>
             <div class="tab-pane fade" id="cat_admin" role="tabpanel" aria-labelledby="v-pills-settings-tab">

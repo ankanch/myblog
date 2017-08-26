@@ -15,14 +15,13 @@ app = Flask(__name__)
 
 # init 
 ConfigDict =  globeVar.VARS
-print(ConfigDict)
 
 @app.route('/')
 def index():
     al = articlesManager.getArticlesList(5)
     cate = categoryManager.getAllCates()
-    return render_template("index.html",TITLE=ConfigDict["SITE_TITLE"],NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,\
-                            AC=al,CATE=cate)
+    return render_template("index.html",TITLE=ConfigDict["SITE_TITLE"][0],title=ConfigDict["SITE_TITLE"][0],NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,\
+                            FOOTER=ConfigDict["SITE_FOTTER_COPYRIGHT"][0],AC=al,CATE=cate)
 
 @app.route('/<url>')
 def xRoute(url):
@@ -38,7 +37,7 @@ def showArticle(url):
     cate = categoryManager.getAllCates()
     code,data,content = articlesManager.getArticleByURL(url)
     if code:
-        return render_template("article.html",TITLE=ConfigDict["SITE_TITLE"],\
+        return render_template("article.html",title=data[1],TITLE=ConfigDict["SITE_TITLE"][0],FOOTER=ConfigDict["SITE_FOTTER_COPYRIGHT"][0],\
                 ATITLE=data[1],CATES=data[3],DATE=data[7],READINGS=data[6],CONTENT=content,\
                 NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,AC=al,CATE=cate)
     return render_template("error_404.html")
@@ -49,7 +48,8 @@ def getCateArticles(cate):
     cates = categoryManager.getAllCates()
     cate = [c for c in cates if c[3].find(cate) > -1]
     atl = articlesManager.getArticleListByCategory(cate[0][1])
-    return render_template("category.html",NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,TITLE=ConfigDict["SITE_TITLE"],AC=atl,CATE=cates)
+    return render_template("category.html",NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,TITLE=ConfigDict["SITE_TITLE"][0],title=cate[0][1],\
+                            FOOTER=ConfigDict["SITE_FOTTER_COPYRIGHT"][0],AC=atl,CATE=cates)
 
 # >>WRAPS of FLASK
 def requires_auth(f):
@@ -67,7 +67,9 @@ def requires_auth(f):
 def admin():
     session = request.cookies.get("session")
     if adminManager.checkSession(session):
-        return render_template("admin_center.html",BASIC_INFO=othersManager.getBasicInfo(),CATES=categoryManager.getAllCates())
+        site_info = othersManager.getSiteSettingInfo(["SITE_TITLE","SITE_FOTTER_COPYRIGHT"])
+        return render_template("admin_center.html",BASIC_INFO=othersManager.getBasicInfo(),\
+                            CATES=categoryManager.getAllCates(),SITE_INFO=site_info)
     else:
         return render_template("admin_login.html",ERROR=True)
 
@@ -116,7 +118,7 @@ def search():
     key = request.form['key']
     result = articlesManager.searchArticle(key)
     return render_template("search_result.html",NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,\
-                            TITLE=ConfigDict["SITE_TITLE"],DATA=result)
+                            TITLE=ConfigDict["SITE_TITLE"][0],FOOTER=ConfigDict["SITE_FOTTER_COPYRIGHT"][0],DATA=result)
 
 @app.route('/adminlogin',methods=['POST','GET'])
 def adminlogin():
@@ -225,6 +227,13 @@ def changeadmininfo():
         return globeVar.SUCCESS
     return globeVar.UNSUCCESS
 
+@app.route('/changesiteinfo',methods=['POST'])
+@requires_auth
+def changesiteInfo():
+    name = request.form['site_name']
+    footer_copyright = request.form['site_copyright']
+    othersManager.updateSiteInfo(name,footer_copyright)
+    return globeVar.SUCCESS
 
 @app.route('/test')
 def test_anything():
