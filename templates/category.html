@@ -1,0 +1,22 @@
+{% extends "template_with_sidebar.html" %} {% block title %}akakanch{% endblock %} {% block content %}
+        {% if AC|length > 0 %}
+        <!--article list-->
+        {% for article in AC%}
+        {{index.buildArticleCard(article[1],article[2], article[7],article[5])}}
+        {% endfor %}
+    {% else %}
+    <div class="card text-white bg-danger" style="max-width: 100%;">
+            <div class="row" style="margin-top:60px;"></div>
+            <div class="card-body" style="text-align:center;">
+              <h4 class="card-title">抱歉！</h4>
+              <p class="card-text">该分类暂时没有文章。</p>
+            </div>
+            <div class="row" style="margin-top:120px;"></div>
+          </div>
+    {% endif %}
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
+{% endblock %}

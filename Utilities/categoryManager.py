@@ -29,3 +29,7 @@ def getAllCates():
     sql = "SELECT * FROM `categories` WHERE 1"
     result = runSQL.runSelect(sql)
     return result
+
+def getCateInfoByURL(url):
+    sql = "SELECT * FROM `categories` WHERE `CURL`='%s'"%url
+    return runSQL.runSelect(sql)

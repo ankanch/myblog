@@ -116,3 +116,11 @@ def searchArticle(key):
     sql = "SELECT  `ATITLE`, `ACONTENT`, `AURL`,  `DATE` FROM `articles` WHERE `ACONTENT` LIKE '%"+ key + "%' or `ATITLE` LIKE '%" + key + "%'"
     result = [[article[0],restoreSpecialCharacter(article[1])[:120],article[2],article[3]] for article in  runSQL.runSelect(sql)]
     return result
+
+def getArticleListByCategory(cate):
+    sql = "SELECT * FROM `articles` WHERE `ACATEGORY`='" + cate + "'"
+    result = [list(article) for article in runSQL.runSelect(sql)]
+    if len(result) > 0:
+        result = list(map(getBrief,result))
+        return result
+    return []

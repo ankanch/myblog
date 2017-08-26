@@ -43,6 +43,14 @@ def showArticle(url):
                 NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,AC=al,CATE=cate)
     return render_template("error_404.html")
 
+@app.route('/category/<cate>')
+def getCateArticles(cate):
+    cate = cate.replace(" ","")
+    cates = categoryManager.getAllCates()
+    cate = [c for c in cates if c[3].find(cate) > -1]
+    atl = articlesManager.getArticleListByCategory(cate[0][1])
+    return render_template("category.html",NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,TITLE=ConfigDict["SITE_TITLE"],AC=atl,CATE=cates)
+
 # >>WRAPS of FLASK
 def requires_auth(f):
     @wraps(f)
@@ -204,7 +212,7 @@ def moveToTrash():
 @app.route('/test')
 def test_anything():
     #return str(categoryManager.getAllCates())
-    return render_template("article.html",NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,TITLE=ConfigDict["SITE_TITLE"])
+    return render_template("category.html")
 
 if __name__ == '__main__':
     if "mode.server" in os.listdir("./"):
