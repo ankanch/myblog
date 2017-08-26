@@ -1,53 +1,10 @@
-{% extends "template.html" %} {% block title %}akakanch{% endblock %} {% block content %}
-<div class="row margin-lr-0" id="index_block">
-    <div class="row" style="display:none">
-        {% import 'macros_build_index.html' as index %}
-    </div>
-    <div class="col-md-8">
+{% extends "template_with_sidebar.html" %} {% block title %}akakanch{% endblock %} {% block content %}
+
         <!--article list-->
         {% for article in AC%}
         {{index.buildArticleCard(article[1],article[2], article[7],article[5])}}
         {% endfor %}
-    </div>
-    <div class="col-md-4">
-        <!--right lane-->
-        <div class="row margin-lr-0 right-panel">
-            <div class="card border-light" style="width: 100%;">
-                <div class="card-header sidebar-header">
-                    <h5 class="sidebar-header-title">最近文章</h5>
-                </div>
-                <div class="card-body">
-                    <ul class="right-list">
-                        {% for article in AC%}
-                        <li><a href="/article/{{article[5]}}">{{article[1]}}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="row margin-lr-0 right-panel">
-            <div class="card border-light" style="width: 100%;">
-                <div class="card-header sidebar-header">
-                        <h5 class="sidebar-header-title">分类目录</h5>
-                </div>
-                <div class="card-body">
-                    <ul class="right-list">
-                        {% for cat in CATE %}
-                        <li><a href="/category/{{cat[3]}}">{{cat[1]}}({{cat[2]}})</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="row margin-lr-0 right-panel">
-            <div class="card border-light" style="width: 100%;">
-                <div class="card-body ">
-                    ...
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 <script>
     $(document).ready(function () {
 
