@@ -27,10 +27,11 @@ def index():
 @app.route('/<url>')
 def xRoute(url):
     url=  "/" + url
+    data = [urlmap.URLMAP_NAVIGATION,ConfigDict["SITE_FOTTER_COPYRIGHT"][0]]
     if url in urlmap.URLMAP_NAVIGATION.keys():
-        return render_template(urlmap.URLMAP_NAVIGATION[url][1])
+        return render_template(urlmap.URLMAP_NAVIGATION[url][1],basic_data=data)
     else:
-        pass
+        return render_template('error_404.html')
 
 @app.route('/article/<url>')
 def showArticle(url):

@@ -1,3 +1,7 @@
 <div style="padding-top:5px;padding-bottom:30px;">
+    {% if FOOTER %}
     {{FOOTER}}
+    {% else %}
+    {{basic_data[1]}}
+    {% endif %}
 </div>

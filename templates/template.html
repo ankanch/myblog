@@ -36,6 +36,7 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="/">主页 <span class="sr-only">(current)</span></a>
                     </li>
+                    {% set NAVIGATION_BAR = basic_data[0] %}
                     {% for key, value in NAVIGATION_BAR.items(): %}
                     {% set current = loop.index %}
                         {% for key, value in NAVIGATION_BAR.items(): %}
