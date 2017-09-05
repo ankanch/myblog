@@ -15,7 +15,6 @@ app = Flask(__name__)
 
 # init 
 ConfigDict =  globeVar.VARS
-print(ConfigDict)
 
 @app.route('/')
 def index():
@@ -23,15 +22,6 @@ def index():
     cate = categoryManager.getAllCates()
     return render_template("index.html",TITLE=ConfigDict["SITE_TITLE"][0],title=ConfigDict["SITE_TITLE"][0],NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,\
                             FOOTER=ConfigDict["SITE_FOTTER_COPYRIGHT"][0],AC=al,CATE=cate)
-
-@app.route('/<url>')
-def xRoute(url):
-    url=  "/" + url
-    data = [urlmap.URLMAP_NAVIGATION,ConfigDict["SITE_FOTTER_COPYRIGHT"][0]]
-    if url in urlmap.URLMAP_NAVIGATION.keys():
-        return render_template(urlmap.URLMAP_NAVIGATION[url][1],basic_data=data)
-    else:
-        return render_template('error_404.html')
 
 @app.route('/article/<url>')
 def showArticle(url):
@@ -236,6 +226,27 @@ def changesiteInfo():
     footer_copyright = request.form['site_copyright']
     othersManager.updateSiteInfo(name,footer_copyright)
     return globeVar.SUCCESS
+
+@app.route('/uploadmedia',methods=['POST'])
+@requires_auth
+def uploadMedia():
+    image = request.files['file']
+    if file.filename == '':
+        return globals.UNSUCCESS
+    if '.' not in filename or filename.rsplit('.', 1)[1].lower() not in ALLOWED_EXTENSIONS:
+        return globeVar.UNSUCCESS
+    file.save(os.path.join(CFG.VAR_MEDIA_UPLOAD_FOLDER, filename))
+    return globeVar.SUCCESS
+
+# universal interface 
+@app.route('/<url>')
+def xRoute(url):
+    url=  "/" + url
+    data = [urlmap.URLMAP_NAVIGATION,ConfigDict["SITE_FOTTER_COPYRIGHT"][0]]
+    if url in urlmap.URLMAP_NAVIGATION.keys():
+        return render_template(urlmap.URLMAP_NAVIGATION[url][1],basic_data=data)
+    else:
+        return render_template('error_404.html')
 
 @app.route('/test')
 def test_anything():

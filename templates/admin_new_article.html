@@ -90,7 +90,17 @@
                     <div class="card bg-light mb-3" style="max-width: 100%;">
                         <div class="card-header">媒体管理器</div>
                         <div class="card-body">
-
+                            <div class="row">
+                                <form method=post enctype=multipart/form-data id="upload_media">
+                                    <input type=file name=file>
+                                    <input type="button" onclick="uploadMedia()" value="上传">
+                                </form>
+                            </div>
+                            <div class="row">
+                                <h5>媒体管理</h5>
+                            </div>
+                            <div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -154,6 +164,10 @@
 
     function saveDraft() {
 
+    }
+
+    function uploadMedia(){
+        SubmitForm("/uploadmedia", "upload_media", "上传失败！请重试！", "媒体上传成功。");
     }
 </script>
 {% endblock %}
