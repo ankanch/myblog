@@ -15,7 +15,15 @@
 .margin-top-5{
     margin-top: 5px;
 }
-
+.margin-top-10{
+    margin-top: 10;
+}
+.margin-top-15{
+    margin-top: 15;
+}
+.margin-top-20{
+    margin-top: 20;
+}
 .padding-lr-0{
     padding-left: 0px;
     padding-right: 0px;

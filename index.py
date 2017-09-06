@@ -227,20 +227,23 @@ def changesiteInfo():
     othersManager.updateSiteInfo(name,footer_copyright)
     return globeVar.SUCCESS
 
-@app.route('/uploadmedia',methods=['POST'])
+@app.route('/uploadimage',methods=['POST'])
 @requires_auth
-def uploadMedia():
-    image = request.files['file']
-    if file.filename == '':
+def uploadImage():
+    image = request.files['image']
+    if image.filename == '':
         return globals.UNSUCCESS
-    if '.' not in filename or filename.rsplit('.', 1)[1].lower() not in ALLOWED_EXTENSIONS:
+    extension_name = image.filename.rsplit('.', 1)[1].lower()
+    if '.' not in image.filename or extension_name not in CFG.VAR_MEDIA_ALLOWED_EXTENSIONS:
         return globeVar.UNSUCCESS
-    file.save(os.path.join(CFG.VAR_MEDIA_UPLOAD_FOLDER, filename))
-    return globeVar.SUCCESS
+    imageidname = "myblogImageNet" + sessionManager.generateSessionID() + "." + extension_name
+    image.save(os.path.join(CFG.VAR_MEDIA_UPLOAD_FOLDER, imageidname ))
+    return globeVar.SUCCESS + ":" + imageidname
 
 # universal interface 
 @app.route('/<url>')
 def xRoute(url):
+    print("in xRoute")
     url=  "/" + url
     data = [urlmap.URLMAP_NAVIGATION,ConfigDict["SITE_FOTTER_COPYRIGHT"][0]]
     if url in urlmap.URLMAP_NAVIGATION.keys():

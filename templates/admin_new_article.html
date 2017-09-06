@@ -88,16 +88,28 @@
             <div class="tab-pane fade" id="article_image_manager" role="tabpanel" aria-labelledby="v-pills-home-tab">
                 <div class="container">
                     <div class="card bg-light mb-3" style="max-width: 100%;">
-                        <div class="card-header">媒体管理器</div>
+                        <div class="card-header">图片管理器</div>
                         <div class="card-body">
                             <div class="row">
-                                <form method=post enctype=multipart/form-data id="upload_media">
-                                    <input type=file name=file>
-                                    <input type="button" onclick="uploadMedia()" value="上传">
+                                <h5>上传新图片</h5>
+                                <form method="post" enctype="multipart/form-data" id="upload_media">
+                                    <input type="file" name="image">
+                                    <input type="submit" value="上传">
                                 </form>
                             </div>
-                            <div class="row">
-                                <h5>媒体管理</h5>
+                            <div class="row margin-top-20">
+                                <h5>图片管理</h5>
+                            </div>
+                            <div class="form-group row">
+                                <label class="form-control-label" for="image_id_of_uploaded">刚刚上传的图片ID：</label>
+                                <input type="text" class="form-control" id="image_id_of_uploaded" placeholder="上传的图片ID" readonly>
+                            </div>
+                            <div class="form-group row">
+                                <label class="form-control-label" for="markdown_code">Markdown代码：</label>
+                                <input type="text" class="form-control" id="markdown_code" placeholder="复制粘贴即可" readonly>
+                            </div>
+                            <div>
+                                如何使用该ID？<br/> 您需要通过Markdown的 <b>![image_description](image_url)</b> 语句来使用。
                             </div>
                             <div>
                             </div>
@@ -114,6 +126,13 @@
         var preview_div = document.getElementById("article_content_preview");
         var article_content = document.getElementById("article_content");
         preview_div.innerHTML = new showdown.Converter().makeHtml(article_content.value);
+        SubmitFormWithFile("/uploadimage", "upload_media", "上传失败！请重试！", "媒体上传成功。", function a(d) {
+            // get image address here
+            console.log(d);
+            imageid = d.split(":")[1];
+            $("#image_id_of_uploaded").val(imageid);
+            $("#markdown_code").val("![myblogImageNet](/static/mediacenter/"+imageid+")");
+        });
     });
 
     function returnControlCenter() {
@@ -166,8 +185,29 @@
 
     }
 
-    function uploadMedia(){
-        SubmitForm("/uploadmedia", "upload_media", "上传失败！请重试！", "媒体上传成功。");
+    function SubmitFormWithFile(urlx, formid, error_msg, success_msg, success_func) {
+        $("form#" + formid).submit(function () {
+            var formData = new FormData($(this)[0]);
+            showMsg("上传中...", 5);
+            $.ajax({
+                url: urlx,
+                type: 'POST',
+                data: formData,
+                async: false,
+                success: function (data) {
+                    if (data.split(":")[0].indexOf("U") > -1) {
+                        showMsg(error_msg, 5);
+                    } else {
+                        showMsg(success_msg, 5);
+                        success_func(data);
+                    }
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+            return false;
+        });
     }
 </script>
 {% endblock %}
