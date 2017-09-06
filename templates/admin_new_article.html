@@ -72,6 +72,7 @@
                         </div>
                     </div>
                 </div>
+                <link href="../static/articles.css" rel="stylesheet">
                 <div class="margin-lr-0" id="article_content_preview">
                     <h3>预览窗口</h3>
                 </div>
@@ -82,6 +83,7 @@
                     var converter = new showdown.Converter();
                     $("#article_content").on('change keyup paste', function () {
                         preview_div.innerHTML = converter.makeHtml(article_content.value);
+                        textAreaAdjust(this);
                     });
                 </script>
             </div>
@@ -131,7 +133,7 @@
             console.log(d);
             imageid = d.split(":")[1];
             $("#image_id_of_uploaded").val(imageid);
-            $("#markdown_code").val("![myblogImageNet](/static/mediacenter/"+imageid+")");
+            $("#markdown_code").val("![myblogImageNet](/static/mediacenter/" + imageid + ")");
         });
     });
 
@@ -183,6 +185,11 @@
 
     function saveDraft() {
 
+    }
+
+    function textAreaAdjust(o) {
+        o.style.height = "1px";
+        o.style.height = (25 + o.scrollHeight) + "px";
     }
 
     function SubmitFormWithFile(urlx, formid, error_msg, success_msg, success_func) {

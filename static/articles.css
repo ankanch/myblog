@@ -1,0 +1,8 @@
+#article_content_preview img{
+    width: 100%;
+    height: 100%;
+}
+
+#article_content_preview p{
+    word-wrap:break-word;
+}

@@ -9,7 +9,8 @@
     <h6 class="article-info" style="color:grey;">{{CATES}}</h6>
     <h6 class="article-info" style="color:grey;">浏览量：{{READINGS}}</h6>
 </div>
-<div class="margin-lr-0" id="article_content">
+<link href="../static/articles.css" rel="stylesheet">
+<div class="margin-lr-0" id="article_content_preview">
     {{CONTENT}}
 </div>
 
@@ -17,7 +18,7 @@
 <script>
     // when document ready , function below will be executed
     $(document).ready(function () {
-        var article_content = document.getElementById("article_content");
+        var article_content = document.getElementById("article_content_preview");
         var converter = new showdown.Converter();
         article_content.innerHTML = converter.makeHtml(article_content.innerHTML);
     });
