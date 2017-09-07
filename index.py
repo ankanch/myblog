@@ -247,7 +247,7 @@ def xRoute(url):
     url=  "/" + url
     data = [urlmap.URLMAP_NAVIGATION,ConfigDict["SITE_FOTTER_COPYRIGHT"][0]]
     if url in urlmap.URLMAP_NAVIGATION.keys():
-        return render_template(urlmap.URLMAP_NAVIGATION[url][1],basic_data=data)
+        return render_template(urlmap.URLMAP_NAVIGATION[url][1],basic_data=data,TITLE=ConfigDict["SITE_TITLE"][0])
     else:
         return render_template('error_404.html')
 
