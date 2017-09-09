@@ -1,0 +1,48 @@
+{% extends "template.html" %} {% block title %}小项目{% endblock %} {% block content %}
+<div class="">
+    <div class="" style="text-align:center;margin-top:155px;margin-bottom:15px;">
+        <h5>这里列举了我的一些小项目。你可以在MIT协议下自由的获取，修改其代码。</h5>
+    </div>
+    <div class="row">
+        <div class="card-group" style="margin:0 auto;">
+            <div class="card" style="width: 20rem;">
+                <div style="margin:0 auto;background:black;width:100%;text-align:center;">
+                    <img class="card-img-top" src="../static/forprojects/buddyrun.png" alt="buddyrun logo" style="width:192px;">
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">BuddyRun</h4>
+                    <p class="card-text">用Unity做的一个考验手速和眼速的跑酷游戏。上下两个小人需要同时操作。</p>
+                    <a href="https://github.com/ankanch/buddyRun" target="_blank" class="btn btn-primary">获取代码</a>
+                </div>
+            </div>
+            <div class="card" style="width: 20rem;">
+                    <div style="margin:0 auto;background:black;width:100%;text-align:center;">
+                    <img class="card-img-top" src="../static/forprojects/qcloud.png" alt="qcloud logo" style="width:192px;">
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">腾讯云管家</h4>
+                    <p class="card-text">腾讯云第三方客户端，可以对基本云资源诸如云服务器，域名，服务器镜像等进行管理。</p>
+                    <a href="https://github.com/ankanch/QCloudManager" target="_blank" class="btn btn-primary">获取代码</a>
+                </div>
+            </div>
+            <div class="card" style="width: 20rem;">
+                    <div style="margin:0 auto;background:black;width:100%;text-align:center;">
+                    <img class="card-img-top" src="../static/no_img.png" alt="myblog logo" style="width:192px;">
+                </div>
+
+                <div class="card-body">
+                    <h4 class="card-title">myblog</h4>
+                    <p class="card-text">一个简单的博客系统，支持Markdown编辑器，本博客就用的这个系统。</p>
+                    <a href="https://github.com/ankanch/myblog" target="_blank" class="btn btn-primary">获取代码</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
+{% endblock %}

@@ -254,7 +254,7 @@ def xRoute(url):
 @app.route('/test')
 def test_anything():
     #return str(categoryManager.getAllCates())
-    return render_template("category.html")
+    return render_template("projects.html")
 
 if __name__ == '__main__':
     if "mode.server" in os.listdir("./"):
