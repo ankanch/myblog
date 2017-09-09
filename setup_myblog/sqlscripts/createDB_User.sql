@@ -1,3 +1,3 @@
 CREATE DATABASE myblog; 
-CREATE USER 'myblog'@'localhost' IDENTIFIED BY '@PASSWORD@';
-GRANT ALL PRIVILEGES ON myblog TO 'myblog'@'localhost';
+CREATE USER 'myblogx'@'localhost' IDENTIFIED BY '@PASSWORD@';
+GRANT ALL PRIVILEGES ON myblog TO 'myblogx'@'localhost';
