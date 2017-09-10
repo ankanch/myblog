@@ -49,7 +49,7 @@ def runUpdate(sql):
 
 if __name__ == "__main__":
     sql = ""
-    
+    #mysql_upgrade
     # Welcome
     print(COPYRIGHT)
     print(">>>myblog ezsetup is running")
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     print(">>>[1]setting up database:")
     VAR_DB_HOST = input("\t>>Input your database host:")
     VAR_DB_PASSWORD = input("\t>>input your password:")
-    print(VAR_DB_HOST)
+
     print("\t>>checking database...")
     DD = None
     try:
@@ -72,27 +72,41 @@ if __name__ == "__main__":
         print(">>>[ERROR] - setup exit.")
         exit()
     DD.close()
+
     print("\t>>create database `myblog`...")
     # create database here
     with open("./sqlscripts/createDB_User.sql") as f:
         sql = f.read()
         sql  = sql.replace("\n","")
-    runUpdateN(sql)
-    myblog_pass = input("\t>>please set a password for user `myblog`:")
+    myblog_pass = input("\t>>please set a password for user `myblogx`:")
     sql = sql.replace("@PASSWORD@",myblog_pass)
     print("\t>>processing....")
+    if runUpdateN(sql) == False:
+        print(">>>ERROR: ezsetup exit!\n>>>Please create database user for myblog with user name `myblogx` manully!")
+        print(">>>For more information,plaese visit: https://github.com/ankanch/myblog")
+        exit()
+
+    print("\t>>writing config...")
+    configs = ""
+    with open("../config/config.py","r") as f:
+        configs = f.read()
+    configs = configs.replace("@HOST@",VAR_DB_HOST)
+    configs = configs.replace("@PASSWORD@",myblog_pass)
+    with open("../config/config.py","w") as f:
+        f.write(configs)
+
     print("\t>>creating table admin....")
     with open("./sqlscripts/createTBadmin.sql") as f:
         sql = f.read()
         sql  = sql.replace("\n","")
     runUpdate(sql)
-    print("\t>>inserting user `myblog` with password",myblog_pass)
-    #run sql to create myblog user and password here
+
     print("\t>>creating table categories....")
     with open("./sqlscripts/createTBCategories.sql") as f:
         sql = f.read()
         sql  = sql.replace("\n","")
     runUpdate(sql)
+
     print("\t>>creating table articles....")
     with open("./sqlscripts/createTBArticles.sql") as f:
         sql = f.read()
