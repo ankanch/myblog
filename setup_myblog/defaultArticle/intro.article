@@ -1,0 +1,50 @@
+
+![myblogImageNet](/static/mediacenter/myblog_logo.png)
+# 欢迎使用myblog，您已经成功安装了myblog！
+
+---
+
+**本文将对myblog进行了一个简单介绍**
+
+myblog完全基于Python开发，您可以在这里获取源代码：[https://github.com/ankanch/myblog](https://github.com/ankanch/myblog),并且可以在遵循MIT协议的前提下随意修改本代码。
+
+myblog使用 [Showdown Editor](https://github.com/showdownjs/showdown) 作为其编辑器，完全支持Markdown到HTML的转换。
+
+
+---
+
+下面是一些字体实例：
+
+# 标题1
+## 标题2
+### 标题3
+#### 标题4
+##### 标题5
+###### 标题6
+
+---
+
+#### 列表
+* 列表1
+    * 一级子列表
+           * 二级子列表3
+* 列表
+
+_斜体字_
+
+**粗体**
+
+[链接](h) 
+
+![图片](http://akakanch.com/wp-content/uploads/2016/01/cropped-QQ%E5%9B%BE%E7%89%8720160115131732-150x150.png)
+
+`引用字体`
+
+1. 标号1
+       * 二级列表
+        * 三级
+2. 标号2
+       1. 子标号 
+	
+	
+*myblog目前还无法支持插入代码*

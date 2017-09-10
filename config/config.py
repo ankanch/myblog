@@ -3,7 +3,6 @@
 
 # DATABASE
 #VAR_DB_HOST = "115.159.197.66"
-#VAR_DB_NAME = "myblog"
 #VAR_DB_USER = "myblog"
 #VAR_DB_PASSWORD = "Ln525SuTr7reDYuP"
 VAR_DB_HOST = "@HOST@"

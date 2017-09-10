@@ -1,4 +1,5 @@
 import pymysql as SQL
+from time import gmtime, strftime,time
 
 #####################################################################
 #                                                                   #
@@ -46,6 +47,20 @@ def runUpdate(sql):
     DBCONN.close()
     return True
 
+def replaceSpecialCharters(raw):
+    charset = {
+    "\"":"xASC_DQ",
+    "'":"xASC_SQ",
+    "`":"xASC_CQ",
+    "&":"xASC_AND",
+    ")":"xASC_RS",
+    "(":"xASC_LS",
+    "[":"xASC_RR",
+    "]":"xASC_LR",
+    }
+    for ch in charset:
+        raw = raw.replace(ch,charset[ch])
+    return raw
 
 if __name__ == "__main__":
     sql = ""
@@ -67,6 +82,19 @@ if __name__ == "__main__":
     DD = None
     try:
         DD = SQL.connect(host=VAR_DB_HOST, port=3306,user="root",passwd=VAR_DB_PASSWORD,db="mysql",charset='UTF8',connect_timeout=20)
+        # check sql version
+        ver = []
+        with DD.cursor() as d:
+            sql = "SELECT VERSION();"
+            d.execute(sql)
+            DD.commit()
+            re = d.fetchall()[0][0]
+            print(re)
+            ver = re.split(".")
+        if not (ver[0] >= '5' and ver[1] >= '5' and ver[3] >= '3'):
+            print(">>>ERROR: You have mysql version",".".join(ver),",but the minimal version myblog support is 5.5.3!Please upgrade your mysql!")
+            DD.close()
+            exit()
     except Exception as e:
         print("\t>>ERROR:",e)
         print(">>>[ERROR] - setup exit.")
@@ -117,6 +145,17 @@ if __name__ == "__main__":
     # insert default uncategorized name
     print(">>>[2]insert default value...")
     sql = "INSERT INTO `categories`( `CNAME`, `CACOUNT`, `CURL`) VALUES ('%s',0,'%s')"%("uncategoried","uncategoried")
+    runUpdate(sql)
+
+    # insert an default articles.
+    timestr = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    ac = ""
+    with open("./defaultArticle/intro.article",encoding='utf-8' ,errors='ignore') as f:
+        ac = f.read()
+    with open("./sqlscripts/insertArticle.sql",encoding='utf-8',errors='ignore') as f:
+        sql = f.read()
+    sql = sql.replace("@content",replaceSpecialCharters(ac))
+    sql = sql .replace("@timestr",timestr)
     runUpdate(sql)
 
     # insert myblog admin

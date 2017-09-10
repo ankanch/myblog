@@ -62,9 +62,9 @@ def getArticleByURL(url):
     sql = "SELECT * FROM `articles` WHERE `AURL`='%s'"%url
     result = runSQL.runSelect(sql)
     if len(result) == 0:
-        return False,"文章不存在",""
+        return False,"Article Not Found",""
     if result[0][8] == 1 or result[0][9] == 1:
-        return False,"文章不可用！",""
+        return False,"Article Invaild",""
     return True,result[0],restoreSpecialCharacter(result[0][2])
 
 def getArticleByID(xid):
