@@ -90,11 +90,14 @@ if __name__ == "__main__":
             DD.commit()
             re = d.fetchall()[0][0]
             print(re)
-            ver = re.split(".")
-        if not (ver[0] >= '5' and ver[1] >= '5' and ver[3] >= '3'):
-            print(">>>ERROR: You have mysql version",".".join(ver),",but the minimal version myblog support is 5.5.3!Please upgrade your mysql!")
-            DD.close()
-            exit()
+            ver = [ int(x) for x in re.split(".")]
+        if not ( int(ver[0]) >= 5 and int(ver[1]) >= 5 and ver[3] >= 3):
+        if int(ver[0]) <=5:
+            if int(ver[1]) <=5:
+                if int(ver[3][0]) < 3 or len(ver[3]) == 1:
+                    print(">>>ERROR: You have mysql version",".".join(ver),",but the minimal version myblog support is 5.5.3!Please upgrade your mysql!")
+                    DD.close()
+                    exit()
     except Exception as e:
         print("\t>>ERROR:",e)
         print(">>>[ERROR] - setup exit.")
