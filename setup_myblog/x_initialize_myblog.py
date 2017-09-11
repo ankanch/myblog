@@ -91,7 +91,6 @@ if __name__ == "__main__":
             re = d.fetchall()[0][0]
             print(re)
             ver = [ int(x) for x in re.split(".")]
-        if not ( int(ver[0]) >= 5 and int(ver[1]) >= 5 and ver[3] >= 3):
         if int(ver[0]) <=5:
             if int(ver[1]) <=5:
                 if int(ver[3][0]) < 3 or len(ver[3]) == 1:
