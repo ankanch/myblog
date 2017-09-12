@@ -3,9 +3,8 @@ import flask
 import os
 import json
 from config import config as CFG
-from config import urlmap
 from Utilities import globeVar
-from Utilities import sessionManager,categoryManager,adminManager,othersManager,articlesManager
+from Utilities import sessionManager,categoryManager,adminManager,othersManager,articlesManager,navsManager
 from Utilities import message as Message
 from functools import wraps
 from flask import Flask, jsonify, redirect, render_template, request,make_response,send_file,Response
@@ -15,13 +14,15 @@ app = Flask(__name__)
 
 # init 
 ConfigDict =  globeVar.VARS
+navsManager.loadNavigationConfig()
 
 @app.route('/')
 def index():
     al = articlesManager.getArticlesList(5)
     cate = categoryManager.getAllCates()
-    return render_template("index.html",TITLE=ConfigDict["SITE_TITLE"][0],title=ConfigDict["SITE_TITLE"][0],NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,\
-                            FOOTER=ConfigDict["SITE_FOTTER_COPYRIGHT"][0],AC=al,CATE=cate)
+    return render_template("index.html",TITLE=ConfigDict["SITE_TITLE"][0],title=ConfigDict["SITE_TITLE"][0],\
+                            NAVIGATION_BAR=navsManager.NAVS_LIST,FOOTER=ConfigDict["SITE_FOTTER_COPYRIGHT"][0],\
+                            AC=al,CATE=cate)
 
 @app.route('/article/<url>')
 def showArticle(url):
@@ -31,7 +32,7 @@ def showArticle(url):
     if code:
         return render_template("article.html",title=data[1],TITLE=ConfigDict["SITE_TITLE"][0],FOOTER=ConfigDict["SITE_FOTTER_COPYRIGHT"][0],\
                 ATITLE=data[1],CATES=data[3],DATE=data[7],READINGS=data[6],CONTENT=content,\
-                NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,AC=al,CATE=cate)
+                NAVIGATION_BAR=navsManager.NAVS_LIST,AC=al,CATE=cate)
     return render_template("error_404.html")
 
 @app.route('/category/<cate>')
@@ -40,7 +41,7 @@ def getCateArticles(cate):
     cates = categoryManager.getAllCates()
     cate = [c for c in cates if c[3].find(cate) > -1]
     atl = articlesManager.getArticleListByCategory(cate[0][1])
-    return render_template("category.html",NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,TITLE=ConfigDict["SITE_TITLE"][0],title=cate[0][1],\
+    return render_template("category.html",NAVIGATION_BAR=navsManager.NAVS_LIST,TITLE=ConfigDict["SITE_TITLE"][0],title=cate[0][1],\
                             FOOTER=ConfigDict["SITE_FOTTER_COPYRIGHT"][0],AC=atl,CATE=cates)
 
 # >>WRAPS of FLASK
@@ -109,7 +110,7 @@ def exitAdmin(session):
 def search():
     key = request.form['key']
     result = articlesManager.searchArticle(key)
-    return render_template("search_result.html",NAVIGATION_BAR=urlmap.URLMAP_NAVIGATION,\
+    return render_template("search_result.html",NAVIGATION_BAR=navsManager.NAVS_LIST,\
                             TITLE=ConfigDict["SITE_TITLE"][0],FOOTER=ConfigDict["SITE_FOTTER_COPYRIGHT"][0],DATA=result)
 
 @app.route('/adminlogin',methods=['POST','GET'])
@@ -162,6 +163,21 @@ def updateCate():
     if categoryManager.changeCate(cate_id,cate_name,cate_url):
         return globeVar.SUCCESS
     return globeVar.UNSUCCESS
+
+@app.route('/deleteNav',methods=['POST'])
+@requires_auth
+def deleteNav():
+    pass
+
+@app.route('/addNav',methods=['POST'])
+@requires_auth
+def addNav():
+    pass
+
+@app.route('/updateNav',methods=['POST'])
+@requires_auth
+def updateNav():
+    pass
 
 @app.route('/publish',methods=['POST'])
 @requires_auth
@@ -243,13 +259,15 @@ def uploadImage():
 # universal interface 
 @app.route('/<url>')
 def xRoute(url):
-    print("in xRoute")
-    url=  "/" + url
-    data = [urlmap.URLMAP_NAVIGATION,ConfigDict["SITE_FOTTER_COPYRIGHT"][0]]
-    if url in urlmap.URLMAP_NAVIGATION.keys():
-        return render_template(urlmap.URLMAP_NAVIGATION[url][1],basic_data=data,TITLE=ConfigDict["SITE_TITLE"][0])
+    code,title,target = navsManager.loadTarget(url)
+    if code:
+        data = [navsManager.NAVS_LIST,ConfigDict["SITE_FOTTER_COPYRIGHT"][0]]
+        print(type(target),target,len(target))
+        return render_template(target ,basic_data=data,NAVIGATION_BAR=navsManager.NAVS_LIST,\
+                                TITLE=ConfigDict["SITE_TITLE"][0])
     else:
         return render_template('error_404.html')
+        
 
 @app.route('/test')
 def test_anything():

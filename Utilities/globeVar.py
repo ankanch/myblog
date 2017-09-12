@@ -5,7 +5,7 @@ from config import config as CFG
 SUCCESS = "OK"
 UNSUCCESS = "U"
 VARS = {}
-
+RCFG = CFG
 ARTICLES_SPECIAL_CHAR = {
     "\"":"xASC_DQ",
     "'":"xASC_SQ",

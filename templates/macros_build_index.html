@@ -22,6 +22,17 @@
 </tr>
 {%- endmacro %}
 
+{% macro buildNavs(id,name,type,target) -%}
+<tr>
+    <th scope="row">{{id}}</th>
+    <td>{{name}}</td>
+    <td>{{type}}</td>
+    <td>{{target}}</td>
+    <td><button type="button" class="btn btn-primary btn-sm" onclick="changeNav('{{id}}')">修改</button>
+        <button type="button" class="btn btn-danger btn-sm" onclick="deleteNav('{{id}}')">删除</button></td>
+</tr>
+{%- endmacro %}
+
 {% macro buildArticleList(id,title,cate,url,readings) -%}
 <tr>
     <th scope="row">{{id}}</th>

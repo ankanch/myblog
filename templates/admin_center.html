@@ -8,6 +8,7 @@
                 aria-expanded="true">文章管理</a>
             <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#cat_category" role="tab" aria-controls="v-pills-messages"
                 aria-expanded="true">分类管理</a>
+            <a class="nav-link" id="v-pills-nav-tab" data-toggle="pill" href="#cat_navs" role="tab" aria-controls="v-pills-navs" aria-expanded="true">顶部导航管理</a>
             <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#cat_site" role="tab" aria-controls="v-pills-settings"
                 aria-expanded="true">站点管理</a>
             <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#cat_admin" role="tab" aria-controls="v-pills-settings"
@@ -179,7 +180,7 @@
                     }
 
                     function editArticle(id) {
-                        window.location.href = "/editpost/"+id;
+                        window.location.href = "/editpost/" + id;
                     }
 
                     function deleteArticle(id) {
@@ -333,12 +334,153 @@
                     }
                 </script>
             </div>
+            <div class="tab-pane fade" id="cat_navs" role="tabpanel" aria-labelledby="v-pills-navs">
+                <div class="container">
+                    <div class="card bg-light mb-3" style="max-width: 100%;">
+                        <div class="card-header">顶部导航管理</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="modal fade" id="modal_edit_navs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">编辑导航</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="form_edit_cate">
+                                                    <div class="form-group">
+                                                        <label for="edit_cate_name_label" class="form-control-label">导航名:</label>
+                                                        <input type="text" name="new_navname" class="form-control" id="edit_cate_name_label">
+                                                        <input type="text" name="id" class="form-control" id="edit_navname" style="display:none;">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="edit_cate_url_label" class="form-control-label">导航类型:</label>
+                                                        <input type="text" name="new_navtype" class="form-control" id="edit_navtype">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="edit_cate_url_label" class="form-control-label">导航目标链接:</label>
+                                                        <input type="text" name="new_navurl" class="form-control" id="edit_navurl">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                                <button type="button" class="btn btn-primary" onclick="changeNav('submit')">确认更改</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <form id="add_new_navs">
+                                <div class="form-group row">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label">新分类：</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" name="catename" id="new_navname" placeholder="导航名">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" name="cateurl" id="new_navtype" placeholder="导航类型">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" name="cateurl" id="new_navurl" placeholder="导航目标链接">
+                                    </div>
+                                    <button type="button" onclick="addNav()" class="btn btn-outline-primary col-sm-2">添加</button>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>导航名</th>
+                                            <th>导航类型</th>
+                                            <th>导航目标链接</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table_nav_list">
+                                        {{index.buildCategory('id','name','article_count','url')}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    var nav_list = [];
+
+                    function changeNav(id) {
+                        if (id == "submit") {
+                            SubmitForm("/updateCate", "form_edit_cate", "修改失败！", "修改成功！", function success() {
+                                $('#modal_edit_cate').modal('toggle');
+                                reload();
+                            });
+                        } else {
+                            $('#modal_edit_cate').modal('toggle');
+                            nav_list.forEach(function (element) {
+                                if (element[0] == id) {
+                                    $("#edit_navname").val(id);
+                                    $("#edit_navtype").val(element[1]);
+                                    $("#edit_navurl").val(element[3]);
+                                }
+                            }, this);
+                        }
+                    }
+
+                    function deleteNav(id) {
+                        postData("/deleteCate", {
+                            "id": id
+                        }, "删除失败！", "删除成功！", reload);
+                    }
+
+                    function addNav() {
+                        var name = document.getElementById("new_catename").value;
+                        var url = document.getElementById("new_cateurl").value;
+                        if (name.length < 2 || url.length < 2) {
+                            console.log(name.length, url.length)
+                            showMsg("请输入有效的分类名或URL！<br>长度均需大于2。", 5);
+                            return false;
+                        }
+                        SubmitForm("/addCate", "add_new_cate", "分类添加失败！存在相同的URL或名称", "分类添加成功！", reload);
+                        return true;
+                    }
+
+                    function getAllNavs(data) {
+                        cate_list = parseTuple(data);
+                        var dstr = "";
+                        // date sequence: ID,NAME,ARTICLES_COUNT,URL
+                        console.log(cate_list);
+                        for (i = 0; i < cate_list.length; i++) {
+                            if (cate_list[i].length < 4) {
+                                continue;
+                            }
+                            var s =
+                                `<tr>
+                                    <th scope="row">${cate_list[i][0]}</th>
+                                    <td>${cate_list[i][1]}</td>
+                                    <td>${cate_list[i][2]}</td>
+                                    <td>${cate_list[i][3]}</td>
+                                    <td><button type="button" class="btn btn-primary btn-sm" onclick="changeCate('${cate_list[i][0]}')">修改</button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteCate(${cate_list[i][0]})">删除</button></td>
+                                </tr>`;
+                            dstr += s;
+                        }
+                        document.getElementById("table_cate_list").innerHTML = dstr;
+                    }
+
+                    function reload() {
+                        Getdata("/get/allcates", getAllCates);
+                    }
+                </script>
+            </div>
             <div class="tab-pane fade" id="cat_site" role="tabpanel" aria-labelledby="v-pills-settings-tab">
                 <div class="container">
                     <div class="card bg-light mb-3" style="max-width: 100%;">
                         <div class="card-header">站点管理</div>
                         <div class="card-body">
-                            <form  method="post" style="max-width:100%;margin:0 auto;" id="site_info">
+                            <form method="post" style="max-width:100%;margin:0 auto;" id="site_info">
                                 <div class="row">
                                     <label for="site_name" class="col-md-2 col-form-label">站点名：</label>
                                     <div class="col-md-3">
@@ -350,10 +492,10 @@
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top:10px;">
-                                        <label for="site_name" class="col-md-2 col-form-label">站点底部信息</label>
-                                        <div class="col-md-10">
+                                    <label for="site_name" class="col-md-2 col-form-label">站点底部信息</label>
+                                    <div class="col-md-10">
                                         <textarea class="form-control" name="site_footer_html" id="site_footer_html" rows="3" placeholder="在这里输入版权等内容，支持全HTML"></textarea>
-                                        </div>
+                                    </div>
                                 </div>
                                 <div style="text-align:center;">
                                     <button type="button" class="btn btn-outline-primary" onclick="saveSiteInfo()">储存</button>
@@ -363,8 +505,8 @@
                     </div>
                 </div>
                 <script>
-                    function saveSiteInfo(){
-                        SubmitForm("/changesiteinfo","site_info","站点信息更新失败！","站点信息更新成功！");
+                    function saveSiteInfo() {
+                        SubmitForm("/changesiteinfo", "site_info", "站点信息更新失败！", "站点信息更新成功！");
                     }
                 </script>
             </div>
@@ -406,20 +548,20 @@
                     </div>
                 </div>
                 <script>
-                    function changePassword(){
+                    function changePassword() {
                         var uname = $("#username").val(),
                             old = $("#old_pwd").val(),
                             newp = $("#new_pwm").val(),
                             newp2 = $("#confirm_new_pwm").val();
-                        if(uname.length < 1 || old.length <1 || newp.length < 1 || newp2.length<1){
-                            showMsg("请输入完所有必要信息！",5);
+                        if (uname.length < 1 || old.length < 1 || newp.length < 1 || newp2.length < 1) {
+                            showMsg("请输入完所有必要信息！", 5);
                             return false;
                         }
-                        if(newp != newp2){
-                            showMsg("新密码不匹配！",5);
+                        if (newp != newp2) {
+                            showMsg("新密码不匹配！", 5);
                             return false;
                         }
-                        SubmitForm("/changeadmininfo", "change_password", "密码修改失败！", "密码修改成功！", function f(){
+                        SubmitForm("/changeadmininfo", "change_password", "密码修改失败！", "密码修改成功！", function f() {
                             $("#username").val("");
                             $("#old_pwd").val("");
                             $("#new_pwm").val("");

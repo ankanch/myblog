@@ -1,4 +1,5 @@
 import pymysql as SQL
+from os import system
 from time import gmtime, strftime,time
 
 #####################################################################
@@ -89,11 +90,10 @@ if __name__ == "__main__":
             d.execute(sql)
             DD.commit()
             re = d.fetchall()[0][0]
-            print(re)
-            ver = [ int(x) for x in re.split(".")]
+            ver = [ int(x[0]) for x in re.split(".")]
         if int(ver[0]) <=5:
             if int(ver[1]) <=5:
-                if int(ver[3][0]) < 3 or len(ver[3]) == 1:
+                if int(ver[2][0]) < 3 and len(ver[3]) == 1:
                     print(">>>ERROR: You have mysql version",".".join(ver),",but the minimal version myblog support is 5.5.3!Please upgrade your mysql!")
                     DD.close()
                     exit()
@@ -171,4 +171,7 @@ if __name__ == "__main__":
     sql = sql.replace("@USERNAME@",username)
     sql = sql.replace("@PASSWORD@",password)
     runUpdate(sql)
-    print(">>>myblog has been set up.\n>>>Thank you for choosing myblog.")
+    print(">>>myblog has been set up.\n>>>We will setup some essential python libaries.")
+    system("pip3 install flask pymysql gunicorn")
+    print(""">>>All done! To run myblog, simplily return upper dir and run `python3 app.py`, then let it stays background.""")
+    print(">>>Thank you for choosing myblog.")

@@ -1,0 +1,11 @@
+# this file stores the navigations of the top bar. 
+# format: nagavigation name,navigation type,navigation target
+#       order : order to show
+#       navigation name: name to diaplay on the top navigation bar
+#       navigation url[unique]: url to visit this one
+#       navigation type:  navigation type [file], file, external URL [exurl]
+#       navigation target: extenerl URL or file
+
+1,小项目,projects,file,projects.html
+2,关于本站,about,file,about.html
+3,My Github Profile,e1,exurl,http://github.com/ankanch
