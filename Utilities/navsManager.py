@@ -24,6 +24,7 @@ def addNav(navorder,navname,navtype,navurl,navtarget):
     return True
 
 def updateNav(navurl,navorder=None,navname=None,navtype=None,navtarget=None):
+    CHANGED = False
     for i,nav in enumerate(NAVS_LIST):
         if nav[2] == navurl:
             if navorder:
@@ -34,10 +35,13 @@ def updateNav(navurl,navorder=None,navname=None,navtype=None,navtarget=None):
                 NAVS_LIST[i][3] = navtype
             if navtarget:
                 NAVS_LIST[i][4] = navtarget
-        else:
-            return False
-    updateNavigationConfig()
-    return True
+            CHANGED = True
+            break
+    if CHANGED:
+        updateNavigationConfig()
+        return True
+    else:
+        return False
 
 def deleteNav(navurl):
     index = None
@@ -51,10 +55,11 @@ def deleteNav(navurl):
         return True
     return False
 
+
 def updateNavigationConfig():
     linedata = [ ",".join(x) for x in NAVS_LIST ]
-    with open(globeVar.RCFG.VAR_CONFIG_NAVS,"w") as f:
-        linedata = ",".join(linedata)
+    with open(globeVar.RCFG.VAR_CONFIG_NAVS,"w",encoding='utf-8') as f:
+        linedata = "\r\n".join(linedata)
         f.write(comments + linedata)
 
 def loadNavigationConfig():
@@ -75,3 +80,4 @@ def loadTarget(url):
             if nav[3] == TYPE_HTML_FILE:
                 return True,nav[1],nav[4]
     return False,None,None
+

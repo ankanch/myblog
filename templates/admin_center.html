@@ -344,26 +344,39 @@
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">编辑导航</h5>
+                                                <h5 class="modal-title" id="exampleModalLabelxx">编辑导航</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                               <span aria-hidden="true">&times;</span>
                                             </button>
                                             </div>
                                             <div class="modal-body">
-                                                <form id="form_edit_cate">
-                                                    <div class="form-group">
-                                                        <label for="edit_cate_name_label" class="form-control-label">导航名:</label>
-                                                        <input type="text" name="new_navname" class="form-control" id="edit_cate_name_label">
-                                                        <input type="text" name="id" class="form-control" id="edit_navname" style="display:none;">
+                                                <form id="form_edit_nav">
+                                                    <div class="row">
+                                                        <div class="form-group col-md-4">
+                                                            <label for="edit_cate_name_label" class="form-control-label">导航名:</label>
+                                                            <input type="text" name="navname" class="form-control" id="edit_navname">
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label for="edit_cate_name_label" class="form-control-label">导航顺序:</label>
+                                                            <input type="number" name="navorder" class="form-control" id="edit_navorder">
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label for="edit_cate_url_label" class="form-control-label">导航类型:</label>
+                                                            <input type="text" name="navtype" class="form-control" id="edit_navtype">
+                                                        </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="edit_cate_url_label" class="form-control-label">导航类型:</label>
-                                                        <input type="text" name="new_navtype" class="form-control" id="edit_navtype">
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label for="edit_cate_url_label" class="form-control-label">导航链接:</label>
+                                                            <input type="text" name="navurl" class="form-control" id="edit_navurl">
+                                                        </div>
+
+                                                        <div class="form-group col-md-6">
+                                                            <label for="edit_cate_url_label" class="form-control-label">导航目标链接:</label>
+                                                            <input type="text" name="navtarget" class="form-control" id="edit_navtarget">
+                                                        </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="edit_cate_url_label" class="form-control-label">导航目标链接:</label>
-                                                        <input type="text" name="new_navurl" class="form-control" id="edit_navurl">
-                                                    </div>
+
                                                 </form>
                                             </div>
                                             <div class="modal-footer">
@@ -376,17 +389,35 @@
                             </div>
                             <form id="add_new_navs">
                                 <div class="form-group row">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">新分类：</label>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="catename" id="new_navname" placeholder="导航名">
+                                    <div class="col-md-2" style="text-align:right;">
+                                        <label for="inputPassword" class="col-form-label">新导航：</label>
                                     </div>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="cateurl" id="new_navtype" placeholder="导航类型">
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" name="navname" id="new_navname" placeholder="导航名">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="number" class="form-control" name="navorder" id="new_order" placeholder="导航顺序">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" name="navtype" id="new_navtype" placeholder="导航类型">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" name="navurl" id="new_navurl" placeholder="导航URL">
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" name="navtarget" id="new_target" placeholder="导航目标链接">
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-2">
-                                        <input type="text" class="form-control" name="cateurl" id="new_navurl" placeholder="导航目标链接">
+                                    <div class="col-md-2">
+                                        <button type="button" onclick="addNav()" class="btn btn-outline-primary ">添加</button>
                                     </div>
-                                    <button type="button" onclick="addNav()" class="btn btn-outline-primary col-sm-2">添加</button>
+
                                 </div>
                             </form>
                             <div class="row">
@@ -395,6 +426,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>导航名</th>
+                                            <th>导航链接</th>
                                             <th>导航类型</th>
                                             <th>导航目标链接</th>
                                             <th>操作</th>
@@ -411,67 +443,76 @@
                 <script>
                     var nav_list = [];
 
-                    function changeNav(id) {
-                        if (id == "submit") {
-                            SubmitForm("/updateCate", "form_edit_cate", "修改失败！", "修改成功！", function success() {
-                                $('#modal_edit_cate').modal('toggle');
+                    function changeNav(url) {
+                        if (url == "submit") {
+                            SubmitForm("/updateNav", "form_edit_nav", "修改失败！", "修改成功！", function success() {
+                                $('#modal_edit_navs').modal('toggle');
                                 reload();
                             });
                         } else {
-                            $('#modal_edit_cate').modal('toggle');
+                            $('#modal_edit_navs').modal('toggle');
                             nav_list.forEach(function (element) {
-                                if (element[0] == id) {
-                                    $("#edit_navname").val(id);
-                                    $("#edit_navtype").val(element[1]);
-                                    $("#edit_navurl").val(element[3]);
+                                if (element[2] == url) {
+                                    $("#edit_navname").val(element[1]);
+                                    $("#edit_navtype").val(element[3]);
+                                    $("#edit_navurl").val(element[2]);
+                                    $("#edit_navorder").val(element[0]);
+                                    $("#edit_navtarget").val(element[4]);
                                 }
                             }, this);
                         }
                     }
 
-                    function deleteNav(id) {
-                        postData("/deleteCate", {
-                            "id": id
+                    function deleteNav(url) {
+                        postData("/deleteNav", {
+                            "url": url
                         }, "删除失败！", "删除成功！", reload);
                     }
 
                     function addNav() {
-                        var name = document.getElementById("new_catename").value;
-                        var url = document.getElementById("new_cateurl").value;
-                        if (name.length < 2 || url.length < 2) {
+                        var name = document.getElementById("new_navname").value;
+                        var order = document.getElementById("new_order").value;
+                        var type = document.getElementById("new_navtype").value;
+                        var url = document.getElementById("new_navurl").value;
+                        var target = document.getElementById("new_target").value;
+                        if (name.length < 2 || url.length < 2 || type.length < 2 || target.length <2) {
                             console.log(name.length, url.length)
-                            showMsg("请输入有效的分类名或URL！<br>长度均需大于2。", 5);
+                            showMsg("请输入有效信息！<br>所有字段不能为空且长度均需大于2。<br/>", 5);
                             return false;
                         }
-                        SubmitForm("/addCate", "add_new_cate", "分类添加失败！存在相同的URL或名称", "分类添加成功！", reload);
+                        SubmitForm("/addNav", "add_new_navs", "新添加失败！存在相同的URL！或者遇到网络问题。", "导航添加成功！", reload);
                         return true;
                     }
 
                     function getAllNavs(data) {
-                        cate_list = parseTuple(data);
+                        nav_list = eval(data);
+                        console.log(nav_list);
                         var dstr = "";
-                        // date sequence: ID,NAME,ARTICLES_COUNT,URL
-                        console.log(cate_list);
-                        for (i = 0; i < cate_list.length; i++) {
-                            if (cate_list[i].length < 4) {
+                        for (i = 0; i < nav_list.length; i++) {
+                            if (nav_list[i].length < 4) {
                                 continue;
                             }
                             var s =
                                 `<tr>
-                                    <th scope="row">${cate_list[i][0]}</th>
-                                    <td>${cate_list[i][1]}</td>
-                                    <td>${cate_list[i][2]}</td>
-                                    <td>${cate_list[i][3]}</td>
-                                    <td><button type="button" class="btn btn-primary btn-sm" onclick="changeCate('${cate_list[i][0]}')">修改</button>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteCate(${cate_list[i][0]})">删除</button></td>
+                                    <th scope="row">${nav_list[i][0]}</th>
+                                    <td>${nav_list[i][1]}</td>
+                                    <td>${nav_list[i][2]}</td>
+                                    <td>${nav_list[i][3]}</td>
+                                    <td>${nav_list[i][4]}</td>
+                                    <td><button type="button" class="btn btn-primary btn-sm" onclick="changeNav('${nav_list[i][2]}')">修改</button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteNav('${nav_list[i][2]}')">删除</button></td>
                                 </tr>`;
                             dstr += s;
                         }
-                        document.getElementById("table_cate_list").innerHTML = dstr;
+                        document.getElementById("table_nav_list").innerHTML = dstr;
+                    }
+
+                    function getNavs() {
+                        Getdata("/getallNav", getAllNavs);
                     }
 
                     function reload() {
-                        Getdata("/get/allcates", getAllCates);
+                        Getdata("/getallNav", getAllNavs);
                     }
                 </script>
             </div>
@@ -585,6 +626,7 @@
         showMsg("获取数据...", 5);
         Getdata("/get/allcates", getAllCates);
         getArticleList();
+        getNavs();
     });
 </script>
 {% endblock %}

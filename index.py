@@ -164,20 +164,43 @@ def updateCate():
         return globeVar.SUCCESS
     return globeVar.UNSUCCESS
 
+@app.route('/getallNav',methods=['GET'])
+@requires_auth
+def getAllNav():
+    return  json.dumps(navsManager.NAVS_LIST)
+
 @app.route('/deleteNav',methods=['POST'])
 @requires_auth
 def deleteNav():
-    pass
+    url = request.form['url']
+    if navsManager.deleteNav(url):
+        return globeVar.SUCCESS
+    return globeVar.UNSUCCESS
 
 @app.route('/addNav',methods=['POST'])
 @requires_auth
 def addNav():
-    pass
+    name = request.form['navname']
+    order = request.form['navorder']
+    ntype = request.form['navtype']
+    url = request.form['navurl']
+    target = request.form['navtarget']
+    if navsManager.addNav(order,name,ntype,url,target):
+        return globeVar.SUCCESS
+    return globeVar.UNSUCCESS
+
 
 @app.route('/updateNav',methods=['POST'])
 @requires_auth
 def updateNav():
-    pass
+    name = request.form['navname']
+    order = request.form['navorder']
+    ntype = request.form['navtype']
+    url = request.form['navurl']
+    target = request.form['navtarget']
+    if navsManager.updateNav(url,order,name,ntype,target):
+        return globeVar.SUCCESS
+    return globeVar.UNSUCCESS
 
 @app.route('/publish',methods=['POST'])
 @requires_auth
