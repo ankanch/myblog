@@ -14,6 +14,7 @@ from time import gmtime, strftime,time
 #                    9 Sep. 2017 by Kanch                           #
 #               https://github.com/ankanch/myblog                   #
 #####################################################################
+NEED = "UPSTART, NGINX"
 STR_NGINX = """server {
     listen 80;
     server_name @server_domain_or_IP;
@@ -182,7 +183,7 @@ if __name__ == "__main__":
     sql = sql.replace("@USERNAME@",username)
     sql = sql.replace("@PASSWORD@",password)
     runUpdate(sql)
-    print(">>>myblog has been set up.\n>>>[4]We will setup some essential python libaries.")
+    print(">>>myblog has been set up.\n>>>[4]We are setting up some essential python libaries.")
     system("pip3 install flask pymysql gunicorn")
 
 
@@ -198,11 +199,14 @@ if __name__ == "__main__":
         f.write(STR_NGINX)
 
     print(">>>[6]copy files...")
-    copy2("./config/upstart/myblog.conf","/etc/init/")
+    copy2("./configs/upstart/myblog.conf","/etc/init/")
+    copy2("./configs/systemd/myblog.service","/etc/systemd/system/")
     copy2("./configs/nginx/myblog","/etc/nginx/sites-available/")
     copy2("./configs/mode.server","../mode.server")
     print("\t>>linking..")
-    system("sudo ln -s /etc/nginx/sites-available/myproject /etc/nginx/sites-enabled")
+    system("sudo systemctl start myblog")
+    system("sudo systemctl enable myblog")
+    system("sudo ln -s /etc/nginx/sites-available/myblog /etc/nginx/sites-enabled")
     print("\t>>restarting nginx...")
     system("sudo service nginx restart")
 

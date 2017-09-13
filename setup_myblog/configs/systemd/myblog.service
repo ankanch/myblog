@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve myblog
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/myblog
+Environment="PATH=/home/ubuntu/myblog"
+ExecStart=/usr/bin/python3 app.py
+
+[Install]
+WantedBy=multi-user.target
