@@ -14,14 +14,14 @@ from time import gmtime, strftime,time
 #                    9 Sep. 2017 by Kanch                           #
 #               https://github.com/ankanch/myblog                   #
 #####################################################################
-NEED = "UPSTART, NGINX"
+NEED = "systemd, NGINX"
 STR_NGINX = """server {
     listen 80;
     server_name @server_domain_or_IP;
 
     location / {
         include proxy_params;
-        proxy_pass http://@server_domain_or_IP:8000;
+        proxy_pass http://@server_internalIP:8000;
     }
 }"""
 
@@ -189,13 +189,14 @@ if __name__ == "__main__":
 
     print(">>>[5] let's set the host Ip where you will run myblog.")
     host_ip = input("\t>>please enter your host IP:")
+    internal_ip = input("\t>>please enter your internal IP:")
     with open("../config/config.py","r",encoding='utf-8') as f:
         configs = f.read()
-    configs = configs.replace("@SITE_HOST@",host_ip)
+    configs = configs.replace("@SITE_HOST@",internal_ip)
     with open("../config/config.py","w",encoding='utf-8') as f:
-        f.write(host_ip)
+        f.write(configs)
     with open("./configs/nginx/myblog","w") as f:
-        STR_NGINX = STR_NGINX.replace("@server_domain_or_IP",host_ip)
+        STR_NGINX = STR_NGINX.replace("@server_domain_or_IP",host_ip).replace("@server_internalIP",internal_ip)
         f.write(STR_NGINX)
 
     print(">>>[6]copy files...")
