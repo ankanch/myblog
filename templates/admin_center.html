@@ -68,7 +68,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="edit_article_cate" class="form-control-label">文章分类:</label>
-                                                        <select class="form-control col-sm-3" name="article_cate" id="edit_article_cate">
+                                                        <select class="form-control" name="article_cate" id="edit_article_cate">
                                                                 {% for cat in CATES %}
                                                                 <option>{{cat[1]}}</option>
                                                                 {% endfor %}
@@ -362,7 +362,10 @@
                                                         </div>
                                                         <div class="form-group col-md-4">
                                                             <label for="edit_cate_url_label" class="form-control-label">导航类型:</label>
-                                                            <input type="text" name="navtype" class="form-control" id="edit_navtype">
+                                                            <select class="form-control " name="navtype" id="edit_navtype">
+                                                                    <option>file</option>
+                                                                    <option>exurl</option>
+                                                              </select>
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -401,7 +404,10 @@
                                                 <input type="number" class="form-control" name="navorder" id="new_order" placeholder="导航顺序">
                                             </div>
                                             <div class="col-md-4">
-                                                <input type="text" class="form-control" name="navtype" id="new_navtype" placeholder="导航类型">
+                                                <select class="form-control" name="navtype" id="new_navtype" style="width:90%;">
+                                                        <option>file</option>
+                                                        <option>exurl</option>
+                                                  </select>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -412,6 +418,18 @@
                                             <div class="col-md-4">
                                                 <input type="text" class="form-control" name="navtarget" id="new_target" placeholder="导航目标链接">
                                             </div>
+                                            <div class="col-md-4">
+                                              <p style="margin-top:5px;"><a data-toggle="collapse" href="#help_addnav" aria-expanded="false" aria-controls="help_addnav"> 如何填写这些字段？ </a></p>
+                                            </div>
+                                        </div>
+                                        <div class="collapse" id="help_addnav">
+                                          <div class="card card-body border-success text-success">
+                                          <b>导航URL</b>应该是一个唯一的URL，用户可以通过该URL访问目标页面。(在导航类型为exurl时，该项无效)<br>
+                                          <b>导航目标链接</b>是该导航的指向目标，可以是文件或者外部URL。<br>
+                                          <b>导航类型</b>指定了该导航是指向外部链接还是站内HTML模板。
+                                          如果导航类型为:file,则指向HTML文件，相应的在导航目标链接哪里应该填上HTML文件的文件名，该文件需要位于templates文件夹内。
+                                          如果导航类型为:exurl,则指向外部URL，相应的在导航目标链接应该填上外部URL地址，在这种情况下导航URL将会被忽略，您可以填入任意之前不存在的值。
+                                          </div>
                                         </div>
                                     </div>
                                     <div class="col-md-2">

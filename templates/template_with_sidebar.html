@@ -4,6 +4,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="index,follow" />
+    <meta name="googlebot" content="index,follow" />
     <title>{% block title %}{% endblock %} - {{TITLE}}</title>
 
     <link href="../static/ilogo.jpg" rel="icon" type="image/x-icon" />
@@ -38,7 +40,7 @@
                     <li class="nav-item active">
                         <a class="nav-link cool-nav" href="/">主页 <span class="sr-only">(current)</span></a>
                     </li>
-                    {% for nav in NAVIGATION_BAR %} 
+                    {% for nav in NAVIGATION_BAR %}
                     {% if nav[3] == "file" %}
                     <a class="nav-link cool-nav" href="{{nav[2]}}">{{nav[1]}}</a>
                     {% else %}
@@ -97,13 +99,6 @@
                                     <li><a href="/category/{{cat[3]}}">{{cat[1]}}({{cat[2]}})</a></li>
                                     {% endfor %}
                                 </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row margin-lr-0 right-panel">
-                        <div class="card border-white" style="width: 100%;">
-                            <div class="card-body ">
-                                ...
                             </div>
                         </div>
                     </div>

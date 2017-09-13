@@ -103,15 +103,11 @@
                                 <h5>图片管理</h5>
                             </div>
                             <div class="form-group row">
-                                <label class="form-control-label" for="image_id_of_uploaded">刚刚上传的图片ID：</label>
-                                <input type="text" class="form-control" id="image_id_of_uploaded" placeholder="上传的图片ID" readonly>
-                            </div>
-                            <div class="form-group row">
                                 <label class="form-control-label" for="markdown_code">Markdown代码：</label>
-                                <input type="text" class="form-control" id="markdown_code" placeholder="复制粘贴即可" readonly>
+                                <textarea class="form-control" id="markdown_code" rows="4" placeholder="图片上传完毕后请复制这里面的代码到左侧编辑区来插入图片。" style="width:100%;resize:none;" readonly></textarea>
                             </div>
                             <div>
-                                如何使用该ID？<br/> 您需要通过Markdown的 <b>![image_description](image_url)</b> 语句来使用。
+                                <b>如何使用？</b><br/> 请直接将以上代码粘贴到左侧编辑区域来使用。
                             </div>
                             <div>
                             </div>
@@ -132,7 +128,6 @@
             // get image address here
             console.log(d);
             imageid = d.split(":")[1];
-            $("#image_id_of_uploaded").val(imageid);
             $("#markdown_code").val("![myblogImageNet](/static/mediacenter/" + imageid + ")");
         });
     });

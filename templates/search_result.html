@@ -3,6 +3,7 @@
     <div class="row" style="display:none">
         {% import 'macros_build_index.html' as index %}
     </div>
+    <p>共找到 {{DATA|length}} 篇 相关文章。</p>
     <div class="container">
         {% if DATA|length > 0 %}
             {% for a in DATA %}
