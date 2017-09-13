@@ -300,9 +300,7 @@ def test_anything():
 if __name__ == '__main__':
     if "mode.server" in os.listdir("./"):
         # when a specific file in current dir,bind IP below  
-        # running on beta.baderlab.org
-        print(">>>Running as server mode,use http://beta.baderlab.org to visit.")
-        app.run(host='192.168.81.218',port=80)
+        app.run(host=CFG.SITE_HOST,port=8000)
     else:
         # local machine for test
         print(">>>Running on local machine.")

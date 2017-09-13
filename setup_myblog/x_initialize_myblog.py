@@ -1,5 +1,6 @@
 import pymysql as SQL
 from os import system
+from shutil import copy2
 from time import gmtime, strftime,time
 
 #####################################################################
@@ -13,6 +14,16 @@ from time import gmtime, strftime,time
 #                    9 Sep. 2017 by Kanch                           #
 #               https://github.com/ankanch/myblog                   #
 #####################################################################
+STR_NGINX = """server {
+    listen 80;
+    server_name @server_domain_or_IP;
+
+    location / {
+        include proxy_params;
+        proxy_pass http://@server_domain_or_IP:8000;
+    }
+}"""
+
 VAR_DB_HOST = ""
 VAR_DB_PASSWORD = ""
 VAR_DB_NAME = "myblog"
@@ -171,7 +182,29 @@ if __name__ == "__main__":
     sql = sql.replace("@USERNAME@",username)
     sql = sql.replace("@PASSWORD@",password)
     runUpdate(sql)
-    print(">>>myblog has been set up.\n>>>We will setup some essential python libaries.")
+    print(">>>myblog has been set up.\n>>>[4]We will setup some essential python libaries.")
     system("pip3 install flask pymysql gunicorn")
+
+
+    print(">>>[5] let's set the host Ip where you will run myblog.")
+    host_ip = input("\t>>please enter your host IP:")
+    with open("../config/config.py","r",encoding='utf-8') as f:
+        configs = f.read()
+    configs = configs.replace("@SITE_HOST@",host_ip)
+    with open("../config/config.py","w",encoding='utf-8') as f:
+        f.write(host_ip)
+    with open("./configs/nginx/myblog","w") as f:
+        STR_NGINX = STR_NGINX.replace("@server_domain_or_IP",host_ip)
+        f.write(STR_NGINX)
+
+    print(">>>[6]copy files...")
+    copy2("./config/upstart/myblog.conf","/etc/init/")
+    copy2("./configs/nginx/myblog","/etc/nginx/sites-available/")
+    copy2("./configs/mode.server","../mode.server")
+    print("\t>>linking..")
+    system("sudo ln -s /etc/nginx/sites-available/myproject /etc/nginx/sites-enabled")
+    print("\t>>restarting nginx...")
+    system("sudo service nginx restart")
+
     print(""">>>All done! To run myblog, simplily return upper dir and run `python3 app.py`, then let it stays background.""")
     print(">>>Thank you for choosing myblog.")

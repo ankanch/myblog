@@ -16,3 +16,7 @@ VAR_CONFIG_FILE = "./config/site.cfg"
 VAR_MEDIA_UPLOAD_FOLDER = './static/mediacenter/'
 VAR_CONFIG_NAVS = "./config/navs.navs"
 VAR_MEDIA_ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+# SITE INFO
+#SITE_HOST = "@SITE_HOST@"
+SITE_HOST = "127.0.0.1"
