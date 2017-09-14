@@ -1,5 +1,6 @@
 ## myblog
 
+for more information: http://akakanch.com
 
 ##### Requirements
 
